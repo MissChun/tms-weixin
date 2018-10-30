@@ -1,169 +1,238 @@
 // pages/waybillList/waybillList.js
+
+import {
+    httpServer
+} from '../../api/request.js'
+
+
 Page({
 
-  /**
-   * 页面的初始数据
-   */
-  data: {
-    fieldList:[
-      { id: 'carrier_name', label: '承运商' },
-      { id: 'order_number', label: '订单号' },
-      { id: 'truck_no', label: '车号' },
-      { id: 'fluid_name', label: '液厂名' },
-      { id: 'waybill_number', label: '运单号' },
-      { id: 'order_station', label: '卸货站点' }
-    ],
-    choosedFieldIndex:2,
-    topBarList:[{
-      label:'装车',
-      param:'all_truck_loaded',
-      isChoosed:true
-    },{
-      label:'匹配卸车',
-      param:'all_match',
-      isChoosed:false
-    },{
-      label:'卸车',
-      param:'all_unload',
-      isChoosed:false
-    },{
-      label:'变更中',
-      param:'all_change',
-      isChoosed:false
-    },{
-      label:'全部',
-      param:'',
-      isChoosed:false
-    }],
-    currentChoosedBar:'all_truck_loaded',
-    waybillListData:[{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'1',
-    },{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'2',
-    },{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'3',
-    },{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'4',
-    }],
-    ajaxdata:[{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'35',
-    },{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'36',
-    },{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'37',
-    },{
-      waybill_number:'运单号：T8188832323',
-      fluid_name:'福建海投新能源有限公司',
-      load_time:'2018-10-18',
-      arrival_time:'2018-10-18',
-      tun:'20',
-      waybill_status:'a',
-      id:'38',
-    }]
+    /**
+     * 页面的初始数据
+     */
+    data: {
+        fieldList: [{
+            id: 'carrier_name',
+            label: '承运商'
+        }, {
+            id: 'order_number',
+            label: '订单号'
+        }, {
+            id: 'truck_no',
+            label: '车号'
+        }, {
+            id: 'fluid_name',
+            label: '液厂名'
+        }, {
+            id: 'waybill_number',
+            label: '运单号'
+        }, {
+            id: 'order_station',
+            label: '卸货站点'
+        }],
+        choosedFieldIndex: 2,
+        pageSize: 10,
+        currentPage: 1,
+        total: '',
+        totalPage: '',
+        searchword: '',
+        topBarList: [{
+            label: '装车',
+            param: 'all_truck_loaded',
+            isChoosed: false
+        }, {
+            label: '匹配卸车',
+            param: 'all_match',
+            isChoosed: true
+        }, {
+            label: '卸车',
+            param: 'all_unload',
+            isChoosed: false
+        }, {
+            label: '变更中',
+            param: 'all_change',
+            isChoosed: false
+        }, {
+            label: '全部',
+            param: '',
+            isChoosed: false
+        }],
+        currentChoosedBar: 'all_match',
+        waybillListData: []
 
-  },
+    },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad(options) {
+      this.getWaybillList();
+    },
 
-  },
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onReady() {
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+    },
 
-  },
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {
+        this.getWaybillList(true);
+    },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-    console.log('xxx');
-    wx.showLoading({
-      title:'数据加载中',
-      mask:true,
-    });
-  },
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage() {
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
+    },
 
-  },
+    chooseField(e) {
+        this.setData({
+            choosedFieldIndex: e.detail.value
+        })
+    },
+    searinputChange(e) {
+        this.setData({
+            searchword: e.detail.value
+        })
+    },
+    startSearch(e) {
+        this.setData({
+            currentPage: 1,
+            waybillListData: [],
+            isGettingList:true,
+        })
+        this.getWaybillList();
+    },
+    getWaybillList(isGetMoreData) {
 
-  chooseField(e){
-     console.log('e.detail',e.detail,this.data.choosedFieldIndex);
-     this.setData({
-      choosedFieldIndex: e.detail.value
-    })
-  },
-  getWaybillList(){
-    
-  },
-  chooseBar(e){
-    console.log('e',e);
-    const choosedParam = e.currentTarget.dataset.param;
-    if(this.currentChoosedBar !== choosedParam){
-      let topBarListCopy = [...this.data.topBarList];
-      console.log('topBarListCopy',topBarListCopy);
-      topBarListCopy.map(item => {
-        item.isChoosed = item.param === choosedParam ? true : false;
-      })
-      this.setData({
-        topBarList:topBarListCopy,
-        currentChoosedBar:choosedParam,
-      })
+        let postData = {
+            page: this.data.currentPage,
+            pageSize: this.data.pageSize,
+            search: this.data.currentChoosedBar,
+            type:'online',
+        };
+
+        if (this.data.searchword.length) {
+            postData[this.data.fieldList[this.data.choosedFieldIndex].id] = this.data.searchword;
+        }
+
+        if (!isGetMoreData || this.data.currentPage < this.data.totalPage) {
+
+            if(isGetMoreData){
+                postData.page = this.data.currentPage +1;
+            }
+            wx.showLoading({
+                title: '数据加载中',
+                mask: true,
+            });
+            this.setData({
+                isGettingList: true
+            })
+            //运单列表里面没有运力信息，必须单独获取运力信息
+            httpServer('getWaybillList', postData).then(res => {
+                wx.hideLoading();
+                if (res.data && res.data.code === 0) {
+                    let resultsData = res.data.data.data;
+                    let tractorList = resultsData.map(item => item.capacity);
+
+                    this.getTractor(tractorList).then(result =>{
+                        let tractorListData = result.data.data.results;
+
+                        //获取到运力信息后，匹配到相应运单上。
+                        resultsData.map((item,index) =>{
+                            tractorListData.map((tractorItem,tractorIndex)=>{
+                              if(tractorItem.id === item.capacity){
+                                item.capacityDetail = tractorItem;
+                              }
+                            })
+                        })
+
+                       let waybillListData = [...this.data.waybillListData, ...resultsData];
+                        this.setData({
+                            waybillListData: waybillListData,
+                            total: res.data.data.count,
+                            totalPage:Math.ceil(res.data.data.count / this.data.pageSize),
+                            isGettingList: false
+                        })
+                        if(isGetMoreData){
+                            this.setData({
+                                currentPage: this.data.currentPage + 1
+                            })
+                        }
+                    });
+
+                } else {
+                    if (res.data && res.data.message) {
+                        wx.showModal({
+                            content: res.data.message,
+                            showCancel: false,
+                        })
+                    }
+                    this.setData({
+                        isGettingList: false
+                    })
+                }
+            }).catch(error =>{
+                wx.hideLoading();
+                this.setData({
+                    isGettingList:false
+                })
+            })
+        }
+
+    },
+    chooseBar(e) {
+        const choosedParam = e.currentTarget.dataset.param;
+        if (this.currentChoosedBar !== choosedParam) {
+            let topBarListCopy = [...this.data.topBarList];
+            topBarListCopy.map(item => {
+                item.isChoosed = item.param === choosedParam ? true : false;
+            })
+            this.setData({
+                topBarList: topBarListCopy,
+                currentChoosedBar: choosedParam,
+                currentPage: 1,
+                waybillListData: [],
+                isGettingList:true,
+            })
+
+            this.getWaybillList();
+        }
+    },
+    goMatch(e) {
+        const waybillId = e.currentTarget.dataset.id;
+        const stepId = e.currentTarget.dataset.stepid;
+        console.log('e',e);
+        wx.navigateTo({
+            url: '/pages/confirmWaybill/confirmWaybill?waybillId=' + waybillId + '&stepId=' + stepId
+        })
+    },
+    getTractor(tractorList) {
+        return new Promise((resolve, reject) => {
+            const postData = {
+                ids: tractorList.join(',')
+            }
+            httpServer('getTractor', postData).then(res => {
+                if (res.data && res.data.code === 0) {
+                    resolve(res);
+                } else {
+                    if (res.data && res.data.message) {
+                        wx.showModal({
+                            content: res.data.message,
+                            showCancel: false,
+                        })
+                    }
+                    reject(res)
+                }
+            }).catch(error =>{
+                reject(error)
+            })
+        })
+
     }
-  },
-  goMatch(e){
-    wx.navigateTo({
-        url:'/pages/matchWaybill/matchWaybill'
-    })
-  }
 })

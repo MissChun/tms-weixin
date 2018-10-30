@@ -15,7 +15,7 @@ page {
     width: 100%;
     height: 192rpx;
 
-    background-color: #499BF8;
+    background-color: #499bf8;
 }
 
 .search-view {
@@ -141,10 +141,12 @@ page {
     color: #fff;
     border-top-left-radius: 8rpx;
     border-top-right-radius: 8rpx;
-    background-color: #659AD7;
+    background-color: #659ad7;
 }
 
 .waybill-item-content {
+    position: relative;
+
     padding: 30rpx 40rpx 0 40rpx;
 
     font-size: 28rpx;
@@ -160,16 +162,47 @@ page {
     font-size: 32rpx;
     line-height: 70rpx;
 
-    color: #499BF8;
-    border: 1px solid #499BF8;
+    color: #499bf8;
+    border: 1px solid #499bf8;
     border-radius: 10rpx;
     background-color: #fff;
 }
 
 .waybill-status {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 28rpx;
+    right: 40rpx;
 
-    color: #499BF8;
+    color: #499bf8;
+}
+.null-view {
+    width: 336rpx;
+    margin: 370rpx auto 0 auto;
+
+    text-align: center;
+}
+
+.null-view image {
+    width: 336rpx;
+    height: 336rpx;
+}
+
+.null-view text {
+    font-size: 32rpx;
+    font-weight: 400;
+    line-height: 44rpx;
+
+    color: #a4aeba;
+}
+
+.gray-tip {
+    margin-bottom: 20rpx;
+
+    font-size: 28rpx;
+    font-weight: 400;
+    line-height: 44rpx;
+
+    text-align: center;
+
+    color: #a4aeba;
 }

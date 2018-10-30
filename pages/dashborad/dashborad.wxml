@@ -1,13 +1,9 @@
 <!--pages/dashborad/dashborad.wxml-->
 <view>
   <view class="inner-container">
-    <navigator url="/pages/waybillList/waybillList" class="nav-item float-left">
-    	<view class="text-center"><text class="item-num">3</text><text class="item-unit"> 单</text></view>
-    	<view class="text-center"><text class="item-title">待匹配卸货地</text></view>
-    </navigator>
-    <navigator url="/pages/waybillList/waybillList" class="nav-item float-left">
-    	<view class="text-center"><text class="item-num">3</text><text class="item-unit"> 单</text></view>
-    	<view class="text-center"><text class="item-title">待确认订单</text></view>
+    <navigator wx:for="{{dashboradList}}" wx:key="params" url="{{item.url}}" open-type="switchTab" class="nav-item float-left">
+        <view class="text-center"><text class="item-num">{{item.num}}</text><text class="item-unit"> 单</text></view>
+        <view class="text-center"><text class="item-title">{{item.title}}</text></view>
     </navigator>
   </view>
 </view>

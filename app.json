@@ -3,12 +3,36 @@
     "pages/index/index",
     "pages/dashborad/dashborad",
     "pages/waybillList/waybillList",
-    "pages/matchWaybill/matchWaybill"
+    "pages/confirmWaybill/confirmWaybill",
+    "pages/setting/setting"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle":"black"
+  },
+  "tabBar":{
+    "color":"#8E9398",
+    "selectedColor":"#499BF8",
+    "backgroundColor":"#ffffff",
+    "borderStyle":"white",
+    "list":[{
+      "pagePath":"pages/dashborad/dashborad",
+      "text":"首页",
+      "iconPath":"/images/index.png",
+      "selectedIconPath":"/images/index-choose.png"
+    },{
+      "pagePath":"pages/waybillList/waybillList",
+      "text":"运单",
+      "iconPath":"/images/waybill.png",
+      "selectedIconPath":"/images/waybill-choose.png"
+    },{
+      "pagePath":"pages/setting/setting",
+      "text":"设置",
+      "iconPath":"/images/setting.png",
+      "selectedIconPath":"/images/setting-choose.png"
+    }]
+
   }
 }
