@@ -1,0 +1,51 @@
+<view class="match-waybill-container">
+	<view class="waybill-list">
+		<view class="waybill-item">
+			<view class="waybill-item-title">
+				<view class="waybill-item-title-content">
+					<text class="float-left">博群安丘中</text>
+					<text class="no-choose"></text>
+					<icon class="choose-icon" type="success" color="#499BF8" size="23"></icon>
+				</view>
+			</view>
+			<view class="waybill-item-content">
+				<view>计划卸车时间：2018-12-01</view>
+				<view>计划卸车吨位</view>
+				<view>收货人：明朗</view>
+				<view>S1sefdf-马明</view>
+			</view>
+		</view>
+		<view class="waybill-item">
+			<view class="waybill-item-title">
+				<view class="waybill-item-title-content">
+					<text class="float-left">运单号：T8188832323</text>
+					<text class="float-right">川A234</text>
+				</view>
+			</view>
+			<view class="waybill-item-content">
+				<view>计划卸车时间：2018-12-01</view>
+				<view>计划卸车吨位</view>
+				<view>收货人：明朗</view>
+				<view>S1sefdf-马明</view>
+			</view>
+		</view>
+		<view class="waybill-item">
+			<view class="waybill-item-title">
+				<view class="waybill-item-title-content">
+					<text class="float-left">运单号：T8188832323</text>
+					<text class="float-right">川A234</text>
+				</view>
+			</view>
+			<view class="waybill-item-content">
+				<view>计划卸车时间：2018-12-01</view>
+				<view>计划卸车吨位</view>
+				<view>收货人：明朗</view>
+				<view>S1sefdf-马明</view>
+			</view>
+		</view>
+	</view>
+	<view class="buttom-confirm">
+		<button  bindtap="confirmMatch" class="confirm-match-btn">确认卸货地</button>
+	</view>
+</view>
+

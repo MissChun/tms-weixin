@@ -27,13 +27,35 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 2,
+			"list": [
+				{
+					"id": -1,
+					"name": "概览",
+					"pathName": "pages/dashborad/dashborad",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "运单列表",
+					"pathName": "pages/waybillList/waybillList",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "确认卸货地",
+					"pathName": "pages/matchWaybill/matchWaybill"
+				}
+			]
 		}
 	}
 }

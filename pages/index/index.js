@@ -1,54 +1,79 @@
-//index.js
-//获取应用实例
-const app = getApp()
-
 Page({
-  data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+  onShareAppMessage() {
+    return {
+      title: 'form',
+      path: 'page/component/pages/form/form'
+    }
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
+  data: {
+    isSendAjax:false,
+  },
+  verifyForm(formData){
+    let   verifyFormResult = {
+      isVerify : true,
+      errorMsg:'',
+    };
+    if(formData.name.length){
+      if(!formData.name.match(/^1\d{10}$/)){
+        verifyFormResult = {
+          isVerify : false,
+          errorMsg:'请填写正确的电话号码',
+        };
+        return verifyFormResult
+      }
+    }else{
+      verifyFormResult = {
+        isVerify : false,
+        errorMsg:'请填写电话号码',
+      };
+      return verifyFormResult
+    }
+
+    if(!formData.password.length){
+      verifyFormResult = {
+        isVerify : false,
+        errorMsg:'请填写密码',
+      };
+      return verifyFormResult
+    }
+
+    return verifyFormResult;
+
+  },
+  formSubmitRequest(formData){
+
+    wx.request({
+      url: 'test.php', //仅为示例，并非真实的接口地址
+      data: {
+        username: formData.name,
+        password: formData.password,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success (res) {
+        if (results.data && results.data.code === 0) {
+          
+        }else{
+
+        }
+      } 
     })
   },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
+  formSubmit(e) {
+    console.log('form发生了submit事件，携带数据为：', e.detail.value);
+    const formData = e.detail.value;
+    const verifyFormResult = this.verifyForm(formData);
+    if(verifyFormResult.isVerify){
+      //this.formSubmitRequest(formData);
+      wx.redirectTo({
+        url:'/pages/dashborad/dashborad'
       })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
+    }else{
+      wx.showModal({
+        content: verifyFormResult.errorMsg,
+        showCancel:false,
       })
     }
   },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    })
-  }
 })

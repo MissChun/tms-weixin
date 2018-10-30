@@ -1,0 +1,43 @@
+<!--pages/waybillList/waybillList.wxml-->
+<view>
+	<view class="top-bar-view">
+		<view class="search-view">
+			<view class="search-box">
+				<view class="traggle-pick">
+					<picker mode="selector" bindchange="chooseField" range-key="label" value="{{choosedFieldIndex}}" range="{{fieldList}}">
+					    <view class="filed-picker">{{fieldList[choosedFieldIndex].label}}</view>
+					</picker>
+					<view class="traggle-down"><image src="/images/traggle_down.png" /></view>
+				</view>
+				<view class="search-input-view">
+					<input confirm-type="search" class="public-input" type="text" name="searchWord" placeholder="请输入" />
+				</view>
+			</view>
+		</view>
+		<view class="top-bar">
+			<view class="float-left top-bar-item" wx:for="{{topBarList}}" wx:key="param">
+				<text data-param="{{item.param}}" catchtap="chooseBar" class="{{item.isChoosed ? 'choosed-bar' : ''}}">{{item.label}}</text>
+			</view>
+		</view>
+	</view>
+	<view class="waybill-list">
+		<view class="waybill-item" wx:for="{{waybillListData}}" wx:key="id">
+			<view class="waybill-item-title">
+				<text class="float-left">运单号：T8188832323</text>
+				<text class="float-right">川A234</text>
+			</view>
+			<view class="waybill-item-content">
+				<view>计划液厂：福建海投新能源有限公司</view>
+				<view>计划装车时间：2018-10-18</view>
+				<view>实际到厂时间：2018-10-18</view>
+				<view class="position-relative">
+					<text>实际装车吨位：20顿</text>
+					<text class="waybill-status">已装车待审核</text>
+				</view>
+				<view>
+					<button  bindtap="goMatch" class="go-match-btn">匹配卸货地</button>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>
