@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "平台运单",
   "navigationBarBackgroundColor":"#499BF8",
-  "navigationBarTextStyle":"white"
+  "navigationBarTextStyle":"white",
+  "enablePullDownRefresh":true
 }

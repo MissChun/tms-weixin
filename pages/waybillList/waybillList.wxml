@@ -22,7 +22,7 @@
 	</view>
 	<view class="waybill-list" wx:if="{{waybillListData.length}}">
 		<block >
-			<view class="waybill-item" wx:for="{{waybillListData}}" wx:key="id" >
+			<view class="waybill-item" wx:for="{{waybillListData}}" wx:key="id">
 				<view class="waybill-item-title">
 					<text class="float-left">运单号：{{item.waybill && item.waybill.waybill_number || '无'}}</text>
 					<text class="float-right">{{item.capacityDetail && item.capacityDetail.tractor && item.capacityDetail.tractor.plate_number}}</text>

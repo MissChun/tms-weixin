@@ -13,9 +13,10 @@ let domainUrl = 'http://39.104.71.159:6602';
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
+    console.log('error',error);
     let errorMsg = '';
-    if (error && error.response) {
-        switch (error.response.status) {
+    if (error && error.statusCode) {
+        switch (error.statusCode) {
             case 400:
                 errorMsg = '参数错误';
                 break;
@@ -66,6 +67,11 @@ const errorState = function(error) {
         })
         wx.redirectTo({
             url: '/pages/index/index'
+        })
+    }else{
+        wx.showToast({
+            title: errorMsg,
+            icon: 'none',
         })
     }
 
@@ -179,21 +185,26 @@ export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErr
             header: httpConfig.headers,
             success(res) {
                 //默认使用successState
-                if (defaultSuccessCallback === undefined) {
-                    successState(res)
-                } else if (typeof defaultSuccessCallback === 'function') {
-                    defaultSuccessCallback(res);
+                if (res.statusCode && res.statusCode != 200) {
+                    errorState(res)
+                } else {
+                    if (defaultSuccessCallback === undefined) {
+
+                    } else if (typeof defaultSuccessCallback === 'function') {
+                        defaultSuccessCallback(res);
+                    }
                 }
                 resolve(res)
             },
             fail(error) {
+                console.log('error',error)
                 //默认使用errorState
                 if (defaultErrorCallback === undefined) {
-                    errorState(response)
+                    errorState(error)
                 } else if (typeof defaultErrorCallback === 'function') {
-                    defaultErrorCallback(response);
+                    defaultErrorCallback(error);
                 }
-                reject(response)
+                reject(error)
             }
         })
     }

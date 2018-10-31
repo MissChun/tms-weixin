@@ -9,17 +9,40 @@ page {
     padding-bottom: 150rpx;
 }
 
+.title-display {
+    padding: 0 40rpx;
+    margin: 40rpx;
+    margin-bottom: 36rpx;
+    box-sizing: border-box;
+
+    font-size: 32rpx;
+    line-height: 80rpx;
+    line-height: 104rpx;
+
+    color: #434343;
+    border-radius: 8rpx;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 #dbdbdb;
+}
+
+.flex-wrpper {
+    display: flex;
+    flex-direction: row;
+}
+
+.title-display-item {
+    width: 50%;
+}
 
 .waybill-list {
     width: 100%;
-    padding: 150rpx 40rpx 0rpx 40rpx;
+    padding: 0rpx 40rpx 0rpx 40rpx;
 
     background-color: #f5f5f5;
 }
 
 .waybill-item {
     width: 100%;
-    height: 400rpx;
     margin-bottom: 36rpx;
 
     border-radius: 8rpx;
@@ -43,35 +66,33 @@ page {
     position: relative;
 
     height: 104rpx;
+    padding-right: 150rpx;
 
     border-bottom: 1rpx solid #e9e9e9;
 }
 
-.no-choose {
+.status-display {
     position: absolute;
-    top: 24rpx;
     right: 0;
 
-    width: 23px;
-    height: 23px;
+    font-size: 28rpx;
 
-    border-radius: 50%;
-    background-color: #e1e1e1;
+    color: #67c23a;
 }
 
-.choose-icon {
-    position: absolute;
-    top: 21rpx;
-    right: 0;
-}
+
 
 .waybill-item-content {
-    padding: 30rpx 40rpx 0 40rpx;
+    padding: 30rpx 40rpx 40rpx 40rpx;
 
     font-size: 28rpx;
     line-height: 58rpx;
 
     color: #434343;
+}
+
+.waybill-item-content text {
+    display: block;
 }
 
 .go-match-btn {
@@ -106,5 +127,5 @@ page {
 
     color: #fff;
     border-radius: 5px;
-    background: #499BF8;
+    background: #499bf8;
 }

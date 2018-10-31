@@ -9,89 +9,82 @@
  */
 
 const api = {
-  login:{
-    url: '/tmswechat/MjtXBj/tmslogin/',
-    method: 'post',
-    desc: '登录',
-    notNeedToken:true,
-    param: {
+    login: {
+        url: '/tmswechat/MjtXBj/tmslogin/',
+        method: 'post',
+        desc: '登录',
+        notNeedToken: true,
+        param: {
 
+        }
+    },
+    logout: {
+        url: '/tmswechat/MjtXBj/tmslogin/out/',
+        method: 'post',
+        desc: '登出',
+        param: {
+
+        }
+    },
+    getDashborad: {
+        url: '/tmswechat/MjtXBj/order/section-trips/dashborad/',
+        method: 'get',
+        desc: '获取dashborad数据',
+        param: {
+
+        }
+    },
+    getUserInfo: {
+        url: '/tmswechat/MjtXBj/user/users/profile/',
+        method: 'get',
+        desc: '获取用户信息',
+        param: {
+
+        }
+    },
+    getWaybillList: {
+        url: '/tmswechat/MjtXBj/order/section-trips/',
+        method: 'get',
+        desc: '获取waybill列表数据',
+        param: {
+
+        }
+    },
+    getTractor: {
+        url: '/tmswechat/MjtXBj/truck/tractor_semitrailers/',
+        method: 'get',
+        desc: '获取运力id',
+        param: {
+
+        }
+    },
+    getSectionTrips: {
+        url: '/tmswechat/MjtXBj/order/section-trips/record/',
+        method: 'get',
+        desc: '获取运单分段进程记录',
+        param: {
+
+        }
+    },
+    getWaybillDetail: {
+        url: '/tmswechat/MjtXBj/order/section-trip/:id/',
+        method: 'get',
+        desc: '获取平台/线下运单状态详细',
+        param: {
+
+        }
+    },
+
+    confirmMatch: {
+        url: '/tmswechat/MjtXBj/order/section-trips/confirm/',
+        method: 'put',
+        desc: '确认卸货地',
+        param: {
+
+        }
     }
-  },
-  logout:{
-    url: '/tmswechat/MjtXBj/tmslogin/out/',
-    method: 'post',
-    desc: '登出',
-    param: {
-
-    }
-  },
-  getDashborad: {
-    url: '/tmswechat/MjtXBj/order/section-trips/dashborad/',
-    method: 'get',
-    desc: '获取dashborad数据',
-    param: {
-
-    }
-  },
-  getUserInfo:{
-    url: '/tmswechat/MjtXBj/user/users/profile/',
-    method: 'get',
-    desc: '获取用户信息',
-    param: {
-
-    }
-  },
-  getWaybillList: {
-    url: '/tmswechat/MjtXBj/order/section-trips/',
-    method: 'get',
-    desc: '获取waybill列表数据',
-    param: {
-
-    }
-  },
 
 
-  getMatchedList:{
-    url: '/bpmwechat/iYdejC/match-helpers/check-order/',
-    method: 'post',
-    desc: '获取已匹配业务单',
-    param: {
-
-    }
-  },
-  getBusinessList: {
-    url: '/bpmwechat/iYdejC/business_order',
-    method: 'get',
-    desc: '匹配运单时获取业务单列表',
-    param: {
-
-    }
-  },
-  matchOrder:{
-    url: '/bpmwechat/iYdejC/waybill-business/match-business-order/',
-    method: 'post',
-    desc: '匹配卸货单',
-    param: {
-
-    }
-  },
-  getTractor:{
-    url: '/tmswechat/MjtXBj/truck/tractor_semitrailers/',
-    method: 'get',
-    desc: '获取运力id',
-    param: {
-
-    }
-  },
-  judeIsCancel:{
-    url: '/bpmwechat/iYdejC/whether-opts/can-cancel/',
-    method: 'post',
-    desc: '判断已匹配的业务单是否能够更改',
-    param: {
-
-    }
-  }
 }
 
 export default api;

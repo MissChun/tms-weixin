@@ -24,3 +24,10 @@ form {
 .position-relative{
 	position:relative;
 }
+
+.over-ellipsis{
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

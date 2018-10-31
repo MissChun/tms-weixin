@@ -1,51 +1,29 @@
 <view class="match-waybill-container">
+	<view class="title-display">
+		<view class="flex-wrpper">
+			<view class="title-display-item"><text>车号：{{waybillDetail.driver_no}}</text></view>
+			<view class="title-display-item"><text>主驾：{{waybillDetail.master_driver_name}}</text></view>
+		</view>
+	</view>
 	<view class="waybill-list">
-		<view class="waybill-item">
+		<view class="waybill-item" wx:for="{{confirmMatchList}}" key="trip_id">
 			<view class="waybill-item-title">
-				<view class="waybill-item-title-content">
-					<text class="float-left">博群安丘中</text>
-					<text class="no-choose"></text>
-					<icon class="choose-icon" type="success" color="#499BF8" size="23"></icon>
+				<view class="waybill-item-title-content over-ellipsis">
+					<text class="station-name ">{{item.station}}</text>
+					<text class="status-display color-green" wx:if="{{item.status === 'new'}}">待确认</text>
+					<text class="status-display color-red" wx:if="{{item.status !== 'new'}}">待取消</text>
 				</view>
 			</view>
 			<view class="waybill-item-content">
-				<view>计划卸车时间：2018-12-01</view>
-				<view>计划卸车吨位</view>
-				<view>收货人：明朗</view>
-				<view>S1sefdf-马明</view>
-			</view>
-		</view>
-		<view class="waybill-item">
-			<view class="waybill-item-title">
-				<view class="waybill-item-title-content">
-					<text class="float-left">运单号：T8188832323</text>
-					<text class="float-right">川A234</text>
-				</view>
-			</view>
-			<view class="waybill-item-content">
-				<view>计划卸车时间：2018-12-01</view>
-				<view>计划卸车吨位</view>
-				<view>收货人：明朗</view>
-				<view>S1sefdf-马明</view>
-			</view>
-		</view>
-		<view class="waybill-item">
-			<view class="waybill-item-title">
-				<view class="waybill-item-title-content">
-					<text class="float-left">运单号：T8188832323</text>
-					<text class="float-right">川A234</text>
-				</view>
-			</view>
-			<view class="waybill-item-content">
-				<view>计划卸车时间：2018-12-01</view>
-				<view>计划卸车吨位</view>
-				<view>收货人：明朗</view>
-				<view>S1sefdf-马明</view>
+				<text>卸货站地址：{{item.station_address}}</text>
+				<text>计划到站时间：{{item.plan_arrive_time}}</text>
+				<text>计划卸车吨位：{{item.plan_tonnage}}</text>
+				<text>收货人：{{item.consignee}}</text>
 			</view>
 		</view>
 	</view>
 	<view class="buttom-confirm">
-		<button  bindtap="confirmMatch" class="confirm-match-btn">确认卸货地</button>
+		<button  bindtap="confirmMatch" loading="{{isConfirming}}" disabled="{{isConfirming}}" class="confirm-match-btn">确认卸货地</button>
 	</view>
 </view>
 

@@ -54,7 +54,7 @@
 					"id": 2,
 					"name": "确认卸货地",
 					"pathName": "pages/confirmWaybill/confirmWaybill",
-					"query": ""
+					"query": "waybillId=bc731dc0-1e60-4561-8b87-ec0caf296739&stepId=d235fb71-3cfd-416a-ab16-0723412c8326"
 				},
 				{
 					"id": -1,
