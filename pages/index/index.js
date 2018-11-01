@@ -9,6 +9,19 @@ Page({
             path: 'page/component/pages/form/form'
         }
     },
+    onLoad() {
+        //如果已经登录则含有token,如果有token则为已登录，直接跳转到dashborad
+        wx.getStorage({
+            key: 'token',
+            success(res) {
+                if (res.data) {
+                    wx.switchTab({
+                        url: '/pages/dashborad/dashborad',
+                    })
+                }
+            }
+        })
+    },
     data: {
         isSendAjax: false,
     },

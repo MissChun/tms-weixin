@@ -58,7 +58,8 @@ Page({
             isChoosed: false
         }],
         currentChoosedBar: 'all_match',
-        waybillListData: []
+        waybillListData: [],
+        postDataCopy: {},
 
     },
 
@@ -81,10 +82,11 @@ Page({
             currentPage: 1,
             waybillListData: [],
             isGettingList: true,
+
         })
-        this.getWaybillList().then(res =>{
+        this.getWaybillList().then(res => {
             wx.stopPullDownRefresh()
-        }).catch(error =>{
+        }).catch(error => {
             wx.stopPullDownRefresh()
         });
     },
@@ -138,8 +140,15 @@ Page({
             if (!isGetMoreData || this.data.currentPage < this.data.totalPage) {
 
                 if (isGetMoreData) {
+                    postData = this.data.postDataCopy;
                     postData.page = this.data.currentPage + 1;
+                } else {
+                    //备份搜索条件
+                    this.setData({
+                        postDataCopy: postData,
+                    })
                 }
+
                 wx.showLoading({
                     title: '数据加载中',
                     mask: true,
@@ -153,34 +162,43 @@ Page({
                     wx.hideLoading();
                     if (res.data && res.data.code === 0) {
                         let resultsData = res.data.data.data;
-                        let tractorList = resultsData.map(item => item.capacity);
-                        //运单列表里面没有运力信息，必须单独获取运力信息
-                        this.getTractor(tractorList).then(result => {
-                            let tractorListData = result.data.data.results;
+                        if (resultsData.length) {
+                            let tractorList = resultsData.map(item => item.capacity);
+                            //运单列表里面没有运力信息，必须单独获取运力信息
+                            this.getTractor(tractorList).then(result => {
+                                let tractorListData = result.data.data.results;
 
-                            //获取到运力信息后，匹配到相应运单上。
-                            resultsData.map((item, index) => {
-                                tractorListData.map((tractorItem, tractorIndex) => {
-                                    if (tractorItem.id === item.capacity) {
-                                        item.capacityDetail = tractorItem;
-                                    }
+                                //获取到运力信息后，匹配到相应运单上。
+                                resultsData.map((item, index) => {
+                                    tractorListData.map((tractorItem, tractorIndex) => {
+                                        if (tractorItem.id === item.capacity) {
+                                            item.capacityDetail = tractorItem;
+                                        }
+                                    })
                                 })
-                            })
 
-                            let waybillListData = [...this.data.waybillListData, ...resultsData];
-                            this.setData({
-                                    waybillListData: waybillListData,
-                                    total: res.data.data.count,
-                                    totalPage: Math.ceil(res.data.data.count / this.data.pageSize),
-                                    isGettingList: false
-                                })
-                                //如果数据返回成功后，更新当前currentPage
-                            if (isGetMoreData) {
+                                let waybillListData = [...this.data.waybillListData, ...resultsData];
                                 this.setData({
-                                    currentPage: this.data.currentPage + 1
-                                })
-                            }
-                        });
+                                        waybillListData: waybillListData,
+                                        total: res.data.data.count,
+                                        totalPage: Math.ceil(res.data.data.count / this.data.pageSize),
+                                        isGettingList: false
+                                    })
+                                    //如果数据返回成功后，更新当前currentPage
+                                if (isGetMoreData) {
+                                    this.setData({
+                                        currentPage: this.data.currentPage + 1
+                                    })
+                                }
+                            });
+                        } else {
+                            this.setData({
+                                waybillListData: [...this.data.waybillListData],
+                                total: res.data.data.count,
+                                totalPage: Math.ceil(res.data.data.count / this.data.pageSize),
+                                isGettingList: false
+                            })
+                        }
 
                     } else {
                         if (res.data && res.data.message) {

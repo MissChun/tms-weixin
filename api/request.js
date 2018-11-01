@@ -175,8 +175,6 @@ export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErr
 
     let httpConfig = dealConfig(apiName, postData);
 
-    console.log('httpConfig', httpConfig);
-
     let request = function(apiName, postData, defaultSuccessCallback, defaultErrorCallback, resolve, reject) {
         wx.request({
             url: httpConfig.url,
