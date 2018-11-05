@@ -1,0 +1,9 @@
+<!--pages/dashborad/dashborad.wxml-->
+<view>
+  <view class="inner-container">
+    <navigator wx:for="{{dashboradList}}" wx:key="params" url="{{item.url}}" open-type="switchTab" class="nav-item float-left">
+        <view class="text-center"><text class="item-num">{{item.num}}</text><text class="item-unit"> 单</text></view>
+        <view class="text-center"><text class="item-title">{{item.title}}</text></view>
+    </navigator>
+  </view>
+</view>

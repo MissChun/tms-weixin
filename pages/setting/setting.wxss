@@ -1,0 +1,25 @@
+/* pages/setting/setting.wxss */
+.inner-container {
+    width: 100%;
+    padding: 0 40rpx;
+}
+.user-msg {
+    padding-top: 40rpx;
+    margin-bottom: 300rpx;
+
+    font-size: 32rpx;
+    line-height: 80rpx;
+
+    color: #434343;
+}
+
+.logout-btn {
+    height: 100rpx;
+
+    font-size: 36rpx;
+    line-height: 100rpx;
+
+    color: #fff;
+    border-radius: 10rpx;
+    background: #499BF8;
+}

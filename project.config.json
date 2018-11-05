@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -27,13 +27,42 @@
 			"current": -1,
 			"list": []
 		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
 		"game": {
 			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 2,
+			"list": [
+				{
+					"id": -1,
+					"name": "概览",
+					"pathName": "pages/dashborad/dashborad",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "运单列表",
+					"pathName": "pages/waybillList/waybillList",
+					"query": ""
+				},
+				{
+					"id": 2,
+					"name": "确认卸货地",
+					"pathName": "pages/confirmWaybill/confirmWaybill",
+					"query": "waybillId=bc731dc0-1e60-4561-8b87-ec0caf296739&stepId=d235fb71-3cfd-416a-ab16-0723412c8326"
+				},
+				{
+					"id": -1,
+					"name": "设置",
+					"pathName": "pages/setting/setting",
+					"query": ""
+				}
+			]
 		}
 	}
 }

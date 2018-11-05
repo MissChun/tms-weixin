@@ -1,0 +1,121 @@
+<!--pages/waybillList/waybillList.wxml-->
+<view class="waybill-container">
+	<view class="top-bar-view">
+		<view class="search-view">
+			<view class="search-box">
+				<view class="traggle-pick">
+					<picker mode="selector" bindchange="chooseField" range-key="label" value="{{choosedFieldIndex}}" range="{{fieldList}}">
+					    <view class="filed-picker">{{fieldList[choosedFieldIndex].label}}</view>
+					</picker>
+					<view class="traggle-down"><image src="/images/traggle_down.png" /></view>
+				</view>
+				<view class="search-input-view">
+					<input confirm-type="search" class="public-input" type="text" name="searchWord" placeholder="请输入" bindinput="searinputChange" bindconfirm="startSearch"/>
+				</view>
+			</view>
+		</view>
+		<view class="top-bar">
+			<view class="float-left top-bar-item" wx:for="{{topBarList}}" wx:key="param">
+				<text data-param="{{item.param}}" catchtap="chooseBar" class="{{item.isChoosed ? 'choosed-bar' : ''}}">{{item.label}}</text>
+			</view>
+		</view>
+	</view>
+	<view class="waybill-list" wx:if="{{waybillListData.length}}">
+		<block >
+			<view class="waybill-item" wx:for="{{waybillListData}}" wx:key="id">
+				<view class="waybill-item-title">
+					<text class="float-left">运单号：{{item.waybill && item.waybill.waybill_number || '无'}}</text>
+					<text class="float-right">{{item.status && item.status.verbose || '无'}}</text>
+				</view>
+
+				<!--装车-->
+				<view class="waybill-item-content" wx:if="{{item.interrupt_status.key === 'normal' && (item.status.key === 'driver_pending_confirmation' || item.status.key === 'to_fluid' || item.status.key === 'reach_fluid' || item.status.key === 'loading_waiting_audit' || item.status.key === 'loading_audit_failed')}}">
+					<view>
+						<text>车号：{{item.capacityDetail && item.capacityDetail.tractor && item.capacityDetail.tractor.plate_number}}</text>
+					</view>
+					<view>
+						<text>计划液厂：{{item.delivery_order && item.delivery_order.actual_fluid_name || '无'}}</text>
+					</view>
+					<view>
+						<text>计划装车时间：{{item.delivery_order && item.delivery_order.plan_time || '无'}}</text>
+					</view>
+					<view>
+						<text>实际到厂时间：{{item.active_time || '无'}}</text>
+					</view>
+					<view>
+						<text>实际装车吨位：{{item.active_tonnage || '无'}}吨</text>
+					</view>
+				</view>
+				<!--匹配卸车-->
+				<view class="waybill-item-content" wx:if="{{item.interrupt_status.key === 'normal' && (item.status.key === 'waiting_match' || item.status.key === 'confirm_match' || item.status.key === 'already_match')}}">
+					<view>
+						<text>车号：{{item.capacityDetail && item.capacityDetail.tractor && item.capacityDetail.tractor.plate_number}}</text>
+					</view>
+					<view>
+						<text>实际装车吨位：{{item.active_tonnage || '无'}}吨</text>
+					</view>
+					<view>
+						<text>装车液厂：{{item.delivery_order && item.delivery_order.actual_fluid_name || '无'}}</text>
+					</view>
+					<view>
+						<text>卸货站名称：{{item.destination || '无'}}</text>
+					</view>
+					<view  wx:if="{{item.status.key === 'confirm_match'}}">
+						<button data-stepid="{{item.id}}" data-id="{{item.waybill.id}}" class="go-match-btn" bindtap="goMatch">确认卸货单</button>
+					</view>
+				</view>
+
+				<!--卸车-->
+				<view class="waybill-item-content" wx:if="{{item.interrupt_status.key === 'normal' && (item.status.key === 'unload_driver_pending_confirmation' || item.status.key === 'to_site' || item.status.key === 'reach_site' || item.status.key === 'unloading_waiting_audit' || item.status.key === 'unloading_audit_failed' || item.status.key==='waiting_settlement' || item.status.key==='in_settlement' || item.status.key==='finished' || item.status.key==='canceled')}}">
+					<view>
+						<text>车号：{{item.capacityDetail && item.capacityDetail.tractor && item.capacityDetail.tractor.plate_number}}</text>
+					</view>
+					<view>
+						<text>卸货站名称：{{item.destination || '无'}}</text>
+					</view>
+					<view>
+						<text>装车液厂：{{item.delivery_order && item.delivery_order.actual_fluid_name || '无'}}</text>
+					</view>
+					<view>
+						<text>计划到站时间：{{item.plan_time || '无'}}</text>
+					</view>
+					<view>
+						<text>计划卸车吨位：{{item.plan_tonnage || '无'}}</text>
+					</view>
+					<view>
+						<text>实际到站时间：{{item.arrival_time || '无'}}</text>
+					</view>
+					<view>
+						<text>实际卸车吨位：{{item.active_tonnage || '无'}}</text>
+					</view>
+				</view>
+
+				<!--变更中-->
+				<view class="waybill-item-content" wx:if="{{item.interrupt_status.key === 'canceling' || item.interrupt_status.key === 'modifying' || item.interrupt_status.key === 'abnormal'}}">
+					<view>
+						<text>车号：{{item.capacityDetail && item.capacityDetail.tractor && item.capacityDetail.tractor.plate_number}}</text>
+					</view>
+					<view>
+						<text>计划液厂：{{item.delivery_order && item.delivery_order.actual_fluid_name || '无'}}</text>
+					</view>
+					<view>
+						<text>计划装车时间：{{item.delivery_order && item.delivery_order.plan_time || '无'}}</text>
+					</view>
+					<view>
+						<text>实际到厂时间：{{item.active_time || '无'}}</text>
+					</view>
+					<view>
+						<text>实际装车吨位：{{item.active_tonnage || '无'}}吨</text>
+					</view>
+				</view>
+
+			</view>
+		</block>
+
+	</view>
+	<view class="gray-tip" wx:if="{{total !== '' && currentPage == totalPage && !isGettingList}}">无更多数据哦~</view>
+	<view wx:if="{{!waybillListData.length && !isGettingList }}" class="null-view">
+		<view><image src="/images/null_data.png"></image></view>
+		<text>暂无数据哦~</text>
+	</view>
+</view>

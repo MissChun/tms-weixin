@@ -1,0 +1,32 @@
+<view class="match-waybill-container">
+	<view class="title-display">
+		<view class="flex-wrpper">
+			<view class="title-display-item"><text>车号：{{tractorDetail.tractor && tractorDetail.tractor.plate_number}}</text></view>
+			<view class="title-display-item"><text>挂车号：{{tractorDetail.semitrailer && tractorDetail.semitrailer.plate_number}}</text></view>
+		</view>
+		<view><text>主驾：{{tractorDetail.master_driver.name}}-{{tractorDetail.master_driver.mobile_phone}}</text></view>
+	</view>
+	<view class="waybill-list">
+		<view class="waybill-item" wx:for="{{confirmMatchList}}" key="trip_id">
+			<view class="waybill-item-title">
+				<view class="waybill-item-title-content over-ellipsis">
+					<text class="station-name ">{{item.station}}</text>
+					<text class="status-display color-green" wx:if="{{item.status === 'new'}}">待确认</text>
+					<text class="status-display color-red" wx:if="{{item.status !== 'new'}}">待取消</text>
+				</view>
+			</view>
+			<view class="waybill-item-content">
+				<text>卸货站地址：{{item.station_address}}</text>
+				<text>计划到站时间：{{item.plan_arrive_time}}</text>
+				<text>计划卸车吨位：{{item.plan_tonnage}}</text>
+				<text>收货人：{{item.consignee}}</text>
+				<text>需求液场：{{waybillDetail.unload_trips && waybillDetail.unload_trips.length && waybillDetail.unload_trips[index].business_order && waybillDetail.unload_trips[index].business_order.actual_fluid_name}}</text>
+				<text>业务单编号-下单人：{{waybillDetail.unload_trips && waybillDetail.unload_trips.length && waybillDetail.unload_trips[index].business_order && waybillDetail.unload_trips[index].business_order.order_number}}-{{waybillDetail.unload_trips && waybillDetail.unload_trips.length && waybillDetail.unload_trips[index].business_order && waybillDetail.unload_trips[index].business_order.sale_man_name}}</text>
+			</view>
+		</view>
+	</view>
+	<view class="buttom-confirm">
+		<button  bindtap="confirmMatch" loading="{{isConfirming}}" disabled="{{isConfirming}}" class="confirm-match-btn">确认卸货地</button>
+	</view>
+</view>
+

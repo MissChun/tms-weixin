@@ -1,13 +1,30 @@
-<!--index.wxml-->
+
 <view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <view class="page-body">
+    <view class="logo-view">
+      <view>
+        <image class="logo-img" src="/images/logo.png"></image>
+      </view>
+      <view>
+        <text class="system-name">运输管理系统</text>
+      </view>
+    </view>
+    <form bindsubmit="formSubmit">
+      <view class="page-section">
+        <view class="input-column">
+          <image class="input-img" src="/images/phone.png"></image>
+          <input class="public-input" type="text" name="name" placeholder="请输入电话号码" />
+        </view>
+      </view>
+      <view class="page-section">
+        <view class="input-column">
+          <image class="input-img" src="/images/password.png"></image>
+          <input class="public-input" type="password" name="password" placeholder="请输入密码" />
+        </view>
+      </view>
+      <view class="btn-view">
+        <button  formType="submit" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="submit-btn">登录</button>
+      </view>
+    </form>
   </view>
 </view>

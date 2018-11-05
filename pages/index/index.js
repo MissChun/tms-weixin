@@ -1,54 +1,113 @@
-//index.js
-//获取应用实例
-const app = getApp()
+import {
+    httpServer
+} from '../../api/request.js'
 
 Page({
-  data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
-  },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
+    onShareAppMessage() {
+        return {
+            title: 'form',
+            path: 'page/component/pages/form/form'
         }
-      })
-    }
-  },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    })
-  }
+    },
+    onLoad() {
+        //如果已经登录则含有token,如果有token则为已登录，直接跳转到dashborad
+        wx.getStorage({
+            key: 'token',
+            success(res) {
+                if (res.data) {
+                    wx.switchTab({
+                        url: '/pages/dashborad/dashborad',
+                    })
+                }
+            }
+        })
+    },
+    data: {
+        isSendAjax: false,
+    },
+    verifyForm(formData) {
+        let verifyFormResult = {
+            isVerify: true,
+            errorMsg: '',
+        };
+        if (formData.name.length) {
+            if (!formData.name.match(/^1\d{10}$/)) {
+                verifyFormResult = {
+                    isVerify: false,
+                    errorMsg: '请填写正确的电话号码',
+                };
+                return verifyFormResult
+            }
+        } else {
+            verifyFormResult = {
+                isVerify: false,
+                errorMsg: '请填写电话号码',
+            };
+            return verifyFormResult
+        }
+
+        if (!formData.password.length) {
+            verifyFormResult = {
+                isVerify: false,
+                errorMsg: '请填写密码',
+            };
+            return verifyFormResult
+        }
+
+        return verifyFormResult;
+
+    },
+    formSubmitRequest(formData) {
+
+        const postData = {
+            username: formData.name,
+            password: formData.password,
+            sms_verify_code: '1111',
+            platform: 'WX_PROGRAM'
+        }
+
+        this.setData({
+            isSendAjax: true
+        })
+
+        httpServer('login', postData).then(res => {
+            this.setData({
+                isSendAjax: false
+            })
+            if (res.data && res.data.code === 1) {
+                const token = res.data.content.data.ticket;
+                console.log('token', token);
+                wx.setStorage({
+                    key: "token",
+                    data: token,
+                    success() {
+                        wx.switchTab({
+                            url: '/pages/dashborad/dashborad',
+                        })
+                    }
+                })
+
+            } else {
+                if (res.data && res.data.msg) {
+                    wx.showModal({
+                        content: res.data.msg,
+                        showCancel: false,
+                    })
+                }
+
+            }
+        })
+    },
+    formSubmit(e) {
+        const formData = e.detail.value;
+        const verifyFormResult = this.verifyForm(formData);
+        if (verifyFormResult.isVerify) {
+            this.formSubmitRequest(formData);
+        } else {
+            wx.showToast({
+                title: verifyFormResult.errorMsg,
+                icon: 'none',
+            })
+        }
+    },
 })
