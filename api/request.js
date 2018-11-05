@@ -8,8 +8,10 @@
 import api from './api';
 
 /* 配置访问url */
-let domainUrl = 'http://39.104.71.159:6602';
 
+let isProduction = true;
+
+let domainUrl = isProduction ? 'https://api.91lng.com/wechat' : 'http://39.104.71.159:6602';
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {

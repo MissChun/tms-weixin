@@ -6,7 +6,7 @@
         <image class="logo-img" src="/images/logo.png"></image>
       </view>
       <view>
-        <text class="system-name">贸易管理系统</text>
+        <text class="system-name">运输管理系统</text>
       </view>
     </view>
     <form bindsubmit="formSubmit">

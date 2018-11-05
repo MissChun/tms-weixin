@@ -5,8 +5,8 @@
 			<view><text>姓名：{{userInfo.nick_name}}</text></view>
 			<view><text>电话号码：{{userInfo.phone}}</text></view>
 			<view><text>所属公司：{{userInfo.carrier.name}}</text></view>
-			<view><text>所属部门：{{userInfo.department}}</text></view>
-			<view><text>职位：{{userInfo.position}}</text></view>
+			<view><text>所属部门：{{department.department && department.department.group_name}}</text></view>
+			<view><text>职位：{{department.carrier_role && department.carrier_role.role_name}}</text></view>
 		</view>
 		<view>
 			<button class="logout-btn" bindtap="logout">退出</button>

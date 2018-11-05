@@ -58,7 +58,7 @@
 						<text>装车液厂：{{item.delivery_order && item.delivery_order.actual_fluid_name || '无'}}</text>
 					</view>
 					<view>
-						<text>卸货站名称：{{item.unload_trips && item.unload_trips.destination || '无'}}</text>
+						<text>卸货站名称：{{item.destination || '无'}}</text>
 					</view>
 					<view  wx:if="{{item.status.key === 'confirm_match'}}">
 						<button data-stepid="{{item.id}}" data-id="{{item.waybill.id}}" class="go-match-btn" bindtap="goMatch">确认卸货单</button>
@@ -66,12 +66,12 @@
 				</view>
 
 				<!--卸车-->
-				<view class="waybill-item-content" wx:if="{{item.interrupt_status.key === 'normal' && (item.status.key === 'unload_driver_pending_confirmation' || item.status.key === 'to_site' || item.status.key === 'reach_site' || item.status.key === 'unloading_waiting_audit ' || item.status.key === 'unloading_audit_failed')}}">
+				<view class="waybill-item-content" wx:if="{{item.interrupt_status.key === 'normal' && (item.status.key === 'unload_driver_pending_confirmation' || item.status.key === 'to_site' || item.status.key === 'reach_site' || item.status.key === 'unloading_waiting_audit' || item.status.key === 'unloading_audit_failed' || item.status.key==='waiting_settlement' || item.status.key==='in_settlement' || item.status.key==='finished' || item.status.key==='canceled')}}">
 					<view>
 						<text>车号：{{item.capacityDetail && item.capacityDetail.tractor && item.capacityDetail.tractor.plate_number}}</text>
 					</view>
 					<view>
-						<text>卸货站名称：{{item.unload_trips && item.unload_trips.destination || '无'}}</text>
+						<text>卸货站名称：{{item.destination || '无'}}</text>
 					</view>
 					<view>
 						<text>装车液厂：{{item.delivery_order && item.delivery_order.actual_fluid_name || '无'}}</text>

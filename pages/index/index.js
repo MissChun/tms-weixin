@@ -62,7 +62,8 @@ Page({
         const postData = {
             username: formData.name,
             password: formData.password,
-            sms_verify_code:'1471',
+            sms_verify_code: '1111',
+            platform: 'WX_PROGRAM'
         }
 
         this.setData({
@@ -75,7 +76,7 @@ Page({
             })
             if (res.data && res.data.code === 1) {
                 const token = res.data.content.data.ticket;
-                console.log('token',token);
+                console.log('token', token);
                 wx.setStorage({
                     key: "token",
                     data: token,
@@ -87,9 +88,9 @@ Page({
                 })
 
             } else {
-                if (res.data && res.data.message) {
+                if (res.data && res.data.msg) {
                     wx.showModal({
-                        content: res.data.message,
+                        content: res.data.msg,
                         showCancel: false,
                     })
                 }

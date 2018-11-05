@@ -21,18 +21,18 @@
     "list":[{
       "pagePath":"pages/dashborad/dashborad",
       "text":"首页",
-      "iconPath":"/images/index.png",
-      "selectedIconPath":"/images/index-choose.png"
+      "iconPath":"/images/index-2.png",
+      "selectedIconPath":"/images/index-2-choose.png"
     },{
       "pagePath":"pages/waybillList/waybillList",
       "text":"运单",
-      "iconPath":"/images/waybill.png",
-      "selectedIconPath":"/images/waybill-choose.png"
+      "iconPath":"/images/waybill-2.png",
+      "selectedIconPath":"/images/waybill-2-choose.png"
     },{
       "pagePath":"pages/setting/setting",
       "text":"设置",
-      "iconPath":"/images/setting.png",
-      "selectedIconPath":"/images/setting-choose.png"
+      "iconPath":"/images/setting-2.png",
+      "selectedIconPath":"/images/setting-2-choose.png"
     }]
 
   }

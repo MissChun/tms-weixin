@@ -8,7 +8,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        userInfo: {}
+        userInfo: {},
+        department: {}
     },
 
     /**
@@ -18,12 +19,14 @@ Page({
         this.getUserInfo();
     },
 
-    getUserInfo() {
-        httpServer('getUserInfo').then(res => {
+    getDepartment(phone) {
+        httpServer('getDepartment', {
+            phone: phone
+        }).then(res => {
             if (res.data && res.data.code === 0) {
-                console.log('res.data.data',res.data.data);
+                console.log('res.data.data', res.data.data);
                 this.setData({
-                    userInfo:res.data.data
+                    department: res.data.data.results[0]
                 })
             } else {
                 if (res.data && res.data.msg) {
@@ -36,6 +39,32 @@ Page({
             }
         })
     },
+
+    getUserInfo() {
+        wx.showLoading({
+            title: '数据加载中',
+            mask: true,
+        })
+        httpServer('getUserInfo').then(res => {
+            if (res.data && res.data.code === 0) {
+                console.log('res.data.data', res.data.data);
+                this.setData({
+                    userInfo: res.data.data
+                })
+                wx.hideLoading();
+                this.getDepartment(res.data.data.phone)
+            } else {
+                if (res.data && res.data.msg) {
+                    wx.showModal({
+                        content: res.data.msg,
+                        showCancel: false,
+                    })
+                }
+
+            }
+        })
+    },
+
     logout() {
 
         wx.showModal({
@@ -59,6 +88,8 @@ Page({
 
                         }
                     })
+
+
                 } else if (res.cancel) {
                     //console.log('用户点击取消')
                 }

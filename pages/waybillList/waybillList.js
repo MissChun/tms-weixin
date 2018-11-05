@@ -12,8 +12,8 @@ Page({
      */
     data: {
         fieldList: [{
-            id: 'carrier_name',
-            label: '承运商'
+            id: 'station_name',
+            label: '托运方'
         }, {
             id: 'order_number',
             label: '订单号'
@@ -69,7 +69,6 @@ Page({
     onLoad(options) {
         this.getWaybillList();
     },
-
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
@@ -201,9 +200,9 @@ Page({
                         }
 
                     } else {
-                        if (res.data && res.data.message) {
+                        if (res.data && res.data.msg) {
                             wx.showModal({
-                                content: res.data.message,
+                                content: res.data.msg,
                                 showCancel: false,
                             })
                         }
@@ -260,9 +259,9 @@ Page({
                 if (res.data && res.data.code === 0) {
                     resolve(res);
                 } else {
-                    if (res.data && res.data.message) {
+                    if (res.data && res.data.msg) {
                         wx.showModal({
-                            content: res.data.message,
+                            content: res.data.msg,
                             showCancel: false,
                         })
                     }

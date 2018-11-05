@@ -51,12 +51,14 @@ Page({
         waybillId: '',
         stepId: '',
         sectionTripsDetail: [],
+        tractorDetail: '',
         waybillDetail: {},
         confirmMatchList: [],
         match_trip_list: [],
         cancel_trip_list: [],
 
         isConfirming: false,
+        isloading: true,
 
     },
 
@@ -102,6 +104,7 @@ Page({
                 id: this.data.stepId
             }
             httpServer('getWaybillDetail', postData).then(res => {
+                this.getTractor([res.data.data.capacity])
                 resolve(res)
             }).catch(error => {
                 reject(error)
@@ -114,6 +117,11 @@ Page({
         let confirmMatchList = [];
         let match_trip_list = [];
         let cancel_trip_list = [];
+
+        wx.showLoading({
+            title: '数据加载中',
+            mask: true,
+        });
 
         Promise.all([p1, p2]).then(res => {
             console.log('res', res);
@@ -146,9 +154,12 @@ Page({
                 cancel_trip_list: cancel_trip_list,
             })
 
+            wx.hideLoading();
+
             console.log('this', this.data.confirmMatchList, this.data.match_trip_list, this.data.cancel_trip_list)
 
         }).catch(error => {
+            wx.hideLoading();
             wx.showToast({
                 title: '数据请求失败',
                 icon: 'none'
@@ -162,9 +173,6 @@ Page({
             choosedFieldIndex: e.detail.value
         })
     },
-    getWaybillList() {
-
-    },
     confirmMatch() {
         const postData = {
             cancel_trip_list: this.data.cancel_trip_list,
@@ -175,7 +183,7 @@ Page({
             isConfirming: true
         })
         httpServer('confirmMatch', postData).then(res => {
-            console.log('res',res);
+            console.log('res', res);
             this.setData({
                 isConfirming: false
             })
@@ -185,7 +193,7 @@ Page({
                     icon: 'none'
                 })
 
-                wx.switchTab({
+                wx.reLaunch({
                     url: '/pages/waybillList/waybillList',
                 })
             } else {
@@ -201,5 +209,31 @@ Page({
                 isConfirming: false
             })
         })
+    },
+    getTractor(tractorList) {
+        return new Promise((resolve, reject) => {
+            const postData = {
+                ids: tractorList.join(',')
+            }
+            httpServer('getTractor', postData).then(res => {
+                if (res.data && res.data.code === 0) {
+                    this.setData({
+                        tractorDetail: res.data.data.results[0]
+                    })
+                    resolve(res);
+                } else {
+                    if (res.data && res.data.msg) {
+                        wx.showModal({
+                            content: res.data.msg,
+                            showCancel: false,
+                        })
+                    }
+                    reject(res)
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        })
+
     }
 })

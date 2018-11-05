@@ -10,14 +10,14 @@ page {
 }
 
 .title-display {
-    padding: 0 40rpx;
+    padding:20rpx 40rpx;
     margin: 40rpx;
     margin-bottom: 36rpx;
     box-sizing: border-box;
 
-    font-size: 32rpx;
-    line-height: 80rpx;
-    line-height: 104rpx;
+    font-size: 28rpx;
+    line-height: 60rpx;
+
 
     color: #434343;
     border-radius: 8rpx;

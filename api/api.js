@@ -82,6 +82,15 @@ const api = {
         param: {
 
         }
+    },
+
+    getDepartment:{
+        url: '/tmswechat/MjtXBj/carrier/users/',
+        method: 'get',
+        desc: '获取用户职位信息',
+        param: {
+
+        }
     }
 
 
