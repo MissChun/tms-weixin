@@ -200,12 +200,6 @@ Page({
                         }
 
                     } else {
-                        if (res.data && res.data.msg) {
-                            wx.showModal({
-                                content: res.data.msg,
-                                showCancel: false,
-                            })
-                        }
                         this.setData({
                             isGettingList: false
                         })
@@ -245,7 +239,6 @@ Page({
     goMatch(e) {
         const waybillId = e.currentTarget.dataset.id;
         const stepId = e.currentTarget.dataset.stepid;
-        console.log('e', e);
         wx.navigateTo({
             url: '/pages/confirmWaybill/confirmWaybill?waybillId=' + waybillId + '&stepId=' + stepId
         })
@@ -259,12 +252,6 @@ Page({
                 if (res.data && res.data.code === 0) {
                     resolve(res);
                 } else {
-                    if (res.data && res.data.msg) {
-                        wx.showModal({
-                            content: res.data.msg,
-                            showCancel: false,
-                        })
-                    }
                     reject(res)
                 }
             }).catch(error => {
