@@ -35,13 +35,6 @@ Page({
                     dashboradList: dashboradListCopy
                 })
 
-            } else {
-                if (res.data && res.data.msg) {
-                    wx.showModal({
-                        content: res.data.msg,
-                        showCancel: false,
-                    })
-                }
             }
         })
     },

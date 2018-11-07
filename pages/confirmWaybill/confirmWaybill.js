@@ -124,7 +124,6 @@ Page({
         });
 
         Promise.all([p1, p2]).then(res => {
-            console.log('res', res);
             if (res[0].data.code === 0) {
                 this.setData({
                     sectionTripsDetail: res[0].data.data
@@ -156,7 +155,6 @@ Page({
 
             wx.hideLoading();
 
-            console.log('this', this.data.confirmMatchList, this.data.match_trip_list, this.data.cancel_trip_list)
 
         }).catch(error => {
             wx.hideLoading();
@@ -168,7 +166,6 @@ Page({
 
     },
     chooseField(e) {
-        console.log('e.detail', e.detail, this.data.choosedFieldIndex);
         this.setData({
             choosedFieldIndex: e.detail.value
         })
@@ -183,7 +180,6 @@ Page({
             isConfirming: true
         })
         httpServer('confirmMatch', postData).then(res => {
-            console.log('res', res);
             this.setData({
                 isConfirming: false
             })
@@ -196,14 +192,7 @@ Page({
                 wx.reLaunch({
                     url: '/pages/waybillList/waybillList',
                 })
-            } else {
-                if (res.data && res.data.msg) {
-                    wx.showToast({
-                        title: res.data.msg,
-                        icon: 'none'
-                    })
-                }
-            }
+            } 
         }).catch(error => {
             this.setData({
                 isConfirming: false
@@ -222,12 +211,6 @@ Page({
                     })
                     resolve(res);
                 } else {
-                    if (res.data && res.data.msg) {
-                        wx.showModal({
-                            content: res.data.msg,
-                            showCancel: false,
-                        })
-                    }
                     reject(res)
                 }
             }).catch(error => {

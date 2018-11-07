@@ -74,9 +74,8 @@ Page({
             this.setData({
                 isSendAjax: false
             })
-            if (res.data && res.data.code === 1) {
+            if (res.data && res.data.code === 0) {
                 const token = res.data.content.data.ticket;
-                console.log('token', token);
                 wx.setStorage({
                     key: "token",
                     data: token,
@@ -86,14 +85,6 @@ Page({
                         })
                     }
                 })
-
-            } else {
-                if (res.data && res.data.msg) {
-                    wx.showModal({
-                        content: res.data.msg,
-                        showCancel: false,
-                    })
-                }
 
             }
         })

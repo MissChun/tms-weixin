@@ -24,7 +24,6 @@ Page({
             phone: phone
         }).then(res => {
             if (res.data && res.data.code === 0) {
-                console.log('res.data.data', res.data.data);
                 this.setData({
                     department: res.data.data.results[0]
                 })
@@ -47,20 +46,11 @@ Page({
         })
         httpServer('getUserInfo').then(res => {
             if (res.data && res.data.code === 0) {
-                console.log('res.data.data', res.data.data);
                 this.setData({
                     userInfo: res.data.data
                 })
                 wx.hideLoading();
                 this.getDepartment(res.data.data.phone)
-            } else {
-                if (res.data && res.data.msg) {
-                    wx.showModal({
-                        content: res.data.msg,
-                        showCancel: false,
-                    })
-                }
-
             }
         })
     },
