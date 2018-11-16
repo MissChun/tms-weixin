@@ -66,26 +66,6 @@ Page({
                     wx.redirectTo({
                         url: '/pages/index/index'
                     })
-                    // httpServer('logout').then(res => {
-                    //     if (res.data && res.data.code === 1) {
-                    //         wx.clearStorage();
-                    //         wx.redirectTo({
-                    //             url: '/pages/index/index'
-                    //         })
-                    //     } else {
-                    //         if (res.data && res.data.msg) {
-                    //             wx.showModal({
-                    //                 content: res.data.msg,
-                    //                 showCancel: false,
-                    //             })
-                    //         }
-
-                    //     }
-                    // })
-
-
-                } else if (res.cancel) {
-                    //console.log('用户点击取消')
                 }
             }
         })

@@ -9,7 +9,7 @@ import api from './api';
 
 /* 配置访问url */
 
-let isProduction = true;
+let isProduction = false;
 
 let domainUrl = isProduction ? 'https://api.91lng.com/wechat' : 'http://39.104.71.159:6602';
 

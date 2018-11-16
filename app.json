@@ -4,7 +4,9 @@
     "pages/dashborad/dashborad",
     "pages/waybillList/waybillList",
     "pages/confirmWaybill/confirmWaybill",
-    "pages/setting/setting"
+    "pages/setting/setting",
+    "pages/orderList/orderList",
+    "pages/arrangeCar/arrangeCar"
   ],
   "window":{
     "backgroundTextStyle":"light",
