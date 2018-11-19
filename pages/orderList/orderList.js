@@ -35,7 +35,7 @@ Page({
         searchword: '',
         topBarList: [{
             label: '全部',
-            param: '',
+            param: 'all',
             isChoosed: false
         }, {
             label: '待指派',
@@ -64,7 +64,21 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        //this.getOrderList();
+        this.setData({
+            currentChoosedBar: options.currentChoosedBar || 'appoint',
+        })
+
+        let topBarListCopy = [...this.data.topBarList];
+
+        topBarListCopy.map(item => {
+            item.isChoosed = item.param === this.data.currentChoosedBar ? true : false;
+        })
+
+        this.setData({
+            topBarList: topBarListCopy,
+        })
+
+        this.getOrderList();
     },
     /**
      * 生命周期函数--监听页面初次渲染完成
@@ -72,7 +86,6 @@ Page({
     onReady() {
 
     },
-
     onPullDownRefresh() {
         this.setData({
             currentPage: 1,
@@ -165,6 +178,9 @@ Page({
                         let resultsData = res.data.data.data;
                         if (resultsData.length) {
                             let orderListData = [...this.data.orderListData, ...resultsData];
+                            orderListData.map(item => {
+                                item.plan_time = item.plan_time.substring(0, 9);
+                            })
                             this.setData({
                                     orderListData: orderListData,
                                     total: res.data.data.count,
@@ -221,10 +237,50 @@ Page({
             this.getOrderList();
         }
     },
-    goMatch(e) {
+    goArrangeCar(e) {
         const id = e.currentTarget.dataset.id;
+        const operate = e.currentTarget.dataset.operate;
         wx.navigateTo({
-            url: '/pages/confirmWaybill/confirmWaybill?waybillId=' + id
+            url: '/pages/arrangeCar/arrangeCar?id=' + id + '&operationStatus=' + operate
         })
     },
+    upPlan(e) {
+        let rowData = e.currentTarget.dataset.rowdata;
+        let sendData = {
+            delivery_order_id: rowData.id
+        }
+        if (rowData.submit_car_number == 0) {
+            wx.showToast({
+                title: '请注意,提交车辆不能为0,请你先添加车辆',
+                icon: 'none',
+                duration: 2000
+            })
+        } else {
+            wx.showLoading({
+                title: '数据提交中...',
+                mask: true,
+            });
+            httpServer("upOrderPlan", sendData).then((results) => {
+                wx.hideLoading();
+                if (results.data.code == 0) {
+
+                    wx.showToast({
+                        title: '提交计划成功',
+                        icon: 'none',
+                        duration: 2000
+                    })
+
+                    setTimeout(() => {
+                        wx.reLaunch({
+                            url: '/pages/orderList/orderList?currentChoosedBar=determine'
+                        })
+                    },2000)
+
+                }
+
+            }).catch(() => {
+                wx.hideLoading();
+            });
+        }
+    }
 })

@@ -84,14 +84,86 @@ const api = {
         }
     },
 
-    getDepartment:{
+    getDepartment: {
         url: '/tmswechat/MjtXBj/carrier/users/',
         method: 'get',
         desc: '获取用户职位信息',
         param: {
 
         }
-    }
+    },
+    getOrderList: {
+        url: '/tmswechat/MjtXBj/order/delivery-order/',
+        method: 'get',
+        desc: '获取订单列表',
+        param: {
+
+        }
+    },
+    searchCapacityList: {
+        url: '/tmswechat/MjtXBj/order_truck/tractor_semitrailers/',
+        method: 'get',
+        desc: '查询运力列表',
+        param: {}
+    },
+    getPickOrderDetail: {
+        url: '/tmswechat/MjtXBj/delivery-order/:id/',
+        method: 'get',
+        desc: '托运单详情',
+        param: {
+
+        }
+    },
+    searchNoUse: {
+        url: '/tmswechat/MjtXBj/order/delivery-order/check_capacity/',
+        method: 'get',
+        desc: '获取3天没用的运力id',
+        param: {
+
+
+        }
+    },
+    searchOrderHasPower: {
+        url: '/tmswechat/MjtXBj/order/delivery-order/list_capacity/',
+        method: 'get',
+        desc: "提货订单所拥有的运力列表",
+        param: {
+
+        }
+    },
+    addCarPower: {
+        url: '/tmswechat/MjtXBj/order/delivery-order/add_capacity/',
+        method: 'POST',
+        desc: '添加运力',
+        param: {
+
+        }
+    },
+    editCarPower: {
+        url: '/tmswechat/MjtXBj/order-delivery-order/:yid/patch-capacity/',
+        method: 'put',
+        desc: '修改运力',
+        param: {
+
+        }
+
+    },
+    judgeCanCancle: {
+        url: '/tmswechat/MjtXBj/order/waybill/cancel/',
+        method: 'post',
+        desc: "判断运单是否可以被取消勾选",
+        param: {
+
+        }
+    },
+    upOrderPlan: {
+        url: '/tmswechat/MjtXBj/order/delivery-order/status/',
+        method: 'PUT',
+        desc: "提交修改计划",
+        param: {
+
+        }
+    },
 
 
 }

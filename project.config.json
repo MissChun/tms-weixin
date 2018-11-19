@@ -69,10 +69,10 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 5,
 					"name": "指派车辆",
 					"pathName": "pages/arrangeCar/arrangeCar",
-					"query": ""
+					"query": "id=ddcd56f2-bd9f-40cd-b012-026a0244f894&operationStatus=add"
 				}
 			]
 		}

@@ -32,21 +32,26 @@
 						<text>液厂：{{item.fluid_name}}</text>
 					</view>
 					<view>
-						<text>计划时间：{{item.plan_time && item.plan_time.split(" ")[0]}}吨</text>
+						<text>计划时间：{{item.plan_time}}</text>
 					</view>
 					<view>
 						<text>需求车数：{{item.sure_car_number}}/{{item.require_car_number}}</text>
 					</view>
 					<view>
-						<text>卸货信息：
-							<text wx:for="{{item.pre_business_order_list}}" wx:for-item="Uitem" wx:for-index="Uindex"><text wx:if="item.pre_business_order_list && item.pre_business_order_list.length>1 &&Uindex!=item.pre_business_order_list.length-1">{{Uitem.station}}/</text><text wx:else>{{Uitem.station}}</text></text>
+						<text>卸货信息：<text wx:for="{{item.pre_business_order_list}}" wx:for-item="Uitem" wx:for-index="Uindex" wx:key="Uindex">
+								<text wx:if="{{item.pre_business_order_list && item.pre_business_order_list.length>1 && Uindex < (item.pre_business_order_list.length-1)}}">{{Uitem.station}}/</text>
+								<text wx:else>{{Uitem.station}}</text>
+							</text>
 						</text>
 					</view>
 					<view  wx:if="{{item.status.key === 'appoint'}}" >
-						<button  data-id="{{item.id}}" class="go-match-btn" bindtap="goMatch">指派车辆</button>
+						<button  data-id="{{item.id}}" data-operate="add" class="go-match-btn" bindtap="goArrangeCar">指派车辆</button>
 					</view>
 					<view  wx:if="{{item.status.key === 'confirmed'}}" >
-						<button  data-id="{{item.id}}" class="go-match-btn" bindtap="goMatch">修改计划</button>
+						<button  data-id="{{item.id}}" data-operate="edit" class="go-match-btn" bindtap="goArrangeCar">修改计划</button>
+					</view>
+					<view  wx:if="{{item.status.key === 'appoint'}}" >
+						<button  data-rowdata="{{item}}" data-operate="edit" class="go-match-btn" bindtap="upPlan">提交计划</button>
 					</view>
 				</view>
 			</view>

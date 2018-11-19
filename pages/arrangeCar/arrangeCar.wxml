@@ -15,7 +15,7 @@
 		</view>
 	</view>
 	<view class="waybill-list">
-		<view class="waybill-item" wx:for="{{confirmMatchList}}" key="trip_id">
+		<view class="waybill-item" wx:for="{{renderAll_list}}" key="trip_id">
 			<view class="waybill-item-title">
 				<view class="waybill-item-title-content over-ellipsis">
 					<text class="station-name ">{{item.tractor.plate_number}}</text>
@@ -32,7 +32,8 @@
 		</view>
 	</view>
 	<view class="buttom-confirm">
-		<button  bindtap="confirmMatch" loading="{{isConfirming}}" disabled="{{isConfirming}}" class="confirm-match-btn">确认卸货地</button>
+		<button wx:if="{{operationStatus === 'add'}}"  bindtap="addCar" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="confirm-match-btn">添加车辆</button>
+		<button wx:if="{{operationStatus !== 'add'}}"  bindtap="changeCar" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="confirm-match-btn">提交修改</button>
 	</view>
 </view>
 

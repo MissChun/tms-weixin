@@ -26,6 +26,11 @@
       "iconPath":"/images/index-2.png",
       "selectedIconPath":"/images/index-2-choose.png"
     },{
+      "pagePath":"pages/orderList/orderList",
+      "text":"订单",
+      "iconPath":"/images/order.png",
+      "selectedIconPath":"/images/order-choose.png"
+    },{
       "pagePath":"pages/waybillList/waybillList",
       "text":"运单",
       "iconPath":"/images/waybill-2.png",
