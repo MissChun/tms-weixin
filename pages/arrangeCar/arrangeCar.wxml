@@ -15,12 +15,12 @@
 		</view>
 	</view>
 	<view class="waybill-list">
-		<view class="waybill-item" wx:for="{{renderAll_list}}" key="trip_id">
+		<view class="waybill-item" wx:for="{{renderAll_list}}" wx:key="id">
 			<view class="waybill-item-title">
 				<view class="waybill-item-title-content over-ellipsis">
 					<text class="station-name ">{{item.tractor.plate_number}}</text>
 					<text class="no-choose" wx-if="{{!item.bindCheckBox && !item.isDisable}}" data-index="{{index}}" bindtap="checkRows"></text>
-					<icon class="choose-icon" type="success" color="#17BEBB" size="23" wx-if="{{item.bindCheckBox && !item.isDisable}}" data-index="{{index}}" bindtap="checkRows"></icon>
+					<icon class="choose-icon" type="success" color="#499BF8" size="23" wx-if="{{item.bindCheckBox && !item.isDisable}}" data-index="{{index}}" bindtap="checkRows"></icon>
 				</view>
 			</view>
 			<view class="waybill-item-content">
@@ -28,6 +28,12 @@
 				<text>副驾：{{item.vice_driver.name}}-{{item.vice_driver.mobile_phone}}</text>
 				<text>押运：{{item.escort_staff.name}}-{{item.escort_staff.mobile_phone}}</text>
 				<text>挂车号：{{item.semitrailer.plate_number}}</text>
+				<text>
+					<text class="status-display success-color" wx:if="{{item.isConfirmed}}">已审核</text>
+					<text class="status-display warning-color" wx:elif="{{item.waybill.status==='canceled'}}">已取消过</text>
+					<text class="status-display danger-color" wx:elif="{{item.isNotCancel}}">不可取消</text>
+					<text class="status-display primary-color" wx:else>未选择过</text>
+				</text>
 			</view>
 		</view>
 	</view>

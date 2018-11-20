@@ -1,4 +1,11 @@
 // pages/waybillList/waybillList.js
+
+/***这个页面主要有四大功能，代码基本继承web端代码
+****1、获取列表数据并排序getList，sortData
+****2、勾选或者取消勾选时各种状态判断 checkRows
+****3、提交数据addCar，changeCar
+****4、前端自己做搜索startSearch
+*/
 import {
     httpServer
 } from '../../api/request.js'
@@ -52,7 +59,6 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-
         this.setData({
             operationStatus: options.operationStatus || 'add',
             id: options.id
@@ -71,6 +77,7 @@ Page({
             choosedFieldIndex: e.detail.value
         })
     },
+    //获取列表数据
     getList() {
         const postData1 = {
             pagination: false,
@@ -136,11 +143,14 @@ Page({
             wx.hideLoading();
         })
     },
-    sortData() {
+    //获取列表数据后对列表数据进行排序，后端没有办法排序，因此全部放在前端，并且后端没有做分页，这里是把所有列表数据一次行拿回来排序并渲染
+    sortData() {//这里的排序方法我继承web端的代码，没有做修改，只做了代码小程序化,这里代码太乱了，需要优化
         let operationArr = [...this.data.tractor_semitrailers_List];
         let newArr = [];
         let fifterArr = [];
+
         for (let i = 0; i < operationArr.length; i++) { //循环所有运力列表
+            
             let addflag = false;
             for (let j = 0; j < this.data.delivery_list.trips.length; j++) { //筛选当前订单的列表
                 //筛选
@@ -150,7 +160,6 @@ Page({
                     if (this.data.delivery_list.trips[j].status != "canceled" && this.data.delivery_list.trips[j].waybill_change_status != "canceled") {
                         operationArr[i].isDisable = false;
                         operationArr[i].bindCheckBox = true;
-                        console.log('operationArr[i]', operationArr[i], i)
                         addflag = true;
                         this.data.now_capacities.push(operationArr[i]);
                         this.setData({
@@ -161,7 +170,6 @@ Page({
                     } else if (this.data.delivery_list.trips[j].waybill_change_status == "canceled") {
                         operationArr[i].isDisable = true;
                         operationArr[i].bindCheckBox = false;
-                        console.log('operationArr[i]', operationArr[i], i)
                         addflag = true;
                         this.data.default_del_capacities.push(operationArr[i].id);
                         this.setData({
@@ -227,6 +235,18 @@ Page({
                 item.isDisable = true;
             });
         }
+
+
+        newArr.map(item =>{
+            if(item.waybill && this.data.allStatus.indexOf(item.waybill.status)>-1){
+                item.isConfirmed = true;
+            }
+            if(item.waybill && this.data.noCanceled.indexOf(item.waybill.status)>-1){
+                item.isNotCancel = true;
+            }
+        })
+
+        
         this.setData({
             trueAll_list: newArr,
             renderAll_list: newArr
@@ -235,13 +255,10 @@ Page({
 
         console.log('renderAll_list', this.data.renderAll_list);
     },
-
+    //取消勾选或者勾选
     checkRows: function(e) {
         const currentIndex = e.currentTarget.dataset.index;
         const currentItem = this.data.renderAll_list[currentIndex];
-
-        console.log('currentItem', currentItem, this.data.renderAll_list);
-
         if (currentItem.id) {
             if (!currentItem.bindCheckBox) { //如果当前为勾选
                 let nextStatus = true; //判断是否是预匹配
@@ -260,42 +277,13 @@ Page({
                         this.searchNoUseCallback(currentIndex, results);
                     })
                 } else {
-                    wx.showModal({
-                        title: '请注意',
-                        content: '预匹配卸货地订单只能匹配一辆车',
-                        showCancel: false,
-                        success(res) {
-
-                        }
+                    wx.showToast({
+                        title: '请注意,预匹配卸货地订单只能匹配一辆车',
+                        icon: 'none',
+                        duration: 2000
                     })
                 }
             } else { //如果是取消勾选,判断当前车辆是否能取消勾选
-                let concelConfirm = () => {
-                    //从当前渲染列表修改bindCheckBox
-                    let currentItemKey = `renderAll_list[${currentIndex}].bindCheckBox`;
-                    this.setData({
-                            [currentItemKey]: false
-                        })
-                        //从所有列表修改bindCheckBox
-                    this.data.trueAll_list.forEach((Titem, index) => {
-                        if (Titem.id == currentItem.id) {
-                            let nowItemKey = `trueAll_list[${index}].bindCheckBox`;
-                            this.setData({
-                                [nowItemKey]: false
-                            })
-                        }
-                    });
-                    //从已选择的列表中去除
-                    let new_now_capacities = [];
-                    this.data.now_capacities.forEach((item, index) => {
-                        if (item.id != currentItem.id) {
-                            new_now_capacities.push(item);
-                        }
-                    });
-                    this.setData({
-                        now_capacities: new_now_capacities
-                    })
-                }
                 if (currentItem.waybill.waybill) {
                     //判断是否能够取消
                     httpServer("judgeCanCancle", {
@@ -303,49 +291,25 @@ Page({
                     }).then((results) => {
                         if (results.data.code == 0) {
                             if (results.data.data.status) {
-                                concelConfirm();
+                                this.concelConfirm(currentIndex);
                             } else {
-                                wx.showModal({
-                                    title: '请注意',
-                                    content: '当前运单不能被取消',
-                                    showCancel: false,
-                                    success(res) {
-
-                                    }
+                                wx.showToast({
+                                    title: '请注意,当前运单不能被取消',
+                                    icon: 'none',
+                                    duration: 2000
                                 })
                             }
                         }
                     })
                 } else {
-                    concelConfirm();
+                    this.concelConfirm(currentIndex);
                 }
             }
         }
     },
-
+    //判断车辆是否在别的订单的回调
     searchNoUseCallback(currentIndex, results) {
-        let confirmChoose = () => {
-            const currentItem = this.data.renderAll_list[currentIndex];
-            //从当前渲染列表修改bindCheckBox
-            let currentItemKey = `renderAll_list[${currentIndex}].bindCheckBox`;
-            this.setData({
-                    [currentItemKey]: true
-                })
-                //添加到已选择的列表
-            this.data.now_capacities.push(currentItem);
-            this.setData({
-                    now_capacities: this.data.now_capacities,
-                })
-                //从所有列表修改bindCheckBox
-            this.data.trueAll_list.forEach((Titem, index) => {
-                if (Titem.id == currentItem.id) {
-                    let nowItemKey = `trueAll_list[${index}].bindCheckBox`;
-                    this.setData({
-                        [nowItemKey]: true
-                    })
-                }
-            });
-        }
+        let currentItem = this.data.renderAll_list[currentIndex];
         if (results.data && results.data.code == 0) {
             let resultsData = results.data.data;
             if (resultsData.interrupt_waybill_number.length > 0) {
@@ -375,13 +339,13 @@ Page({
                     cancelText: '返回',
                     success(res) {
                         if (res.confirm) {
-                            confirmChoose();
+                            this.confirmChoose(currentIndex);
                         }
                     }
                 })
 
             } else if (resultsData.trips_driver_unconfirm_list.length != 0) {
-                //司机有未确认的
+                //司机有未确认的订单
                 let orderNum = resultsData.trips_driver_unconfirm_list.map(item => item.delivery_order_number);
                 let noticeStr = '司机有未确认订单，订单号为：' + orderNum.join('、') + '，继续操作可能导致司机上传磅单和后续流程错误，是否继续添加进本订单？';
                 wx.showModal({
@@ -391,18 +355,69 @@ Page({
                     cancelText: '返回',
                     success(res) {
                         if (res.confirm) {
-                            confirmChoose();
+                            this.confirmChoose(currentIndex);
 
                         }
                     }
                 })
             } else if (resultsData.trips_driver_unconfirm_list.length == 0 && resultsData.delivery_list.length == 0 && results.data.data.interrupt_waybill_number.length == 0) {
                 //正常派单
-                confirmChoose();
+                this.confirmChoose(currentIndex);
             }
         }
     },
-
+    //取消勾选变更数据
+    concelConfirm(currentIndex) {
+        let currentItem = this.data.renderAll_list[currentIndex];
+        //从当前渲染列表修改bindCheckBox
+        let currentItemKey = `renderAll_list[${currentIndex}].bindCheckBox`;
+        this.setData({
+                [currentItemKey]: false
+            })
+            //从所有列表修改bindCheckBox
+        this.data.trueAll_list.forEach((Titem, index) => {
+            if (Titem.id == currentItem.id) {
+                let nowItemKey = `trueAll_list[${index}].bindCheckBox`;
+                this.setData({
+                    [nowItemKey]: false
+                })
+            }
+        });
+        //从已选择的列表中去除
+        let new_now_capacities = [];
+        this.data.now_capacities.forEach((item, index) => {
+            if (item.id != currentItem.id) {
+                new_now_capacities.push(item);
+            }
+        });
+        this.setData({
+            now_capacities: new_now_capacities
+        })
+    },
+    //勾选变更数据
+    confirmChoose(currentIndex) {
+        let currentItem = this.data.renderAll_list[currentIndex];
+        //从当前渲染列表修改bindCheckBox
+        let currentItemKey = `renderAll_list[${currentIndex}].bindCheckBox`;
+        this.setData({
+                [currentItemKey]: true
+            })
+            //添加到已选择的列表
+        this.data.now_capacities.push(currentItem);
+        this.setData({
+                now_capacities: this.data.now_capacities,
+            })
+            //从所有列表修改bindCheckBox
+        this.data.trueAll_list.forEach((Titem, index) => {
+            if (Titem.id == currentItem.id) {
+                let nowItemKey = `trueAll_list[${index}].bindCheckBox`;
+                this.setData({
+                    [nowItemKey]: true
+                })
+            }
+        });
+    },
+    //添加车辆
     addCar() {
         if (this.data.now_capacities.length > 0) {
 
@@ -439,7 +454,7 @@ Page({
                                 isSendAjax: false
                             })
                         });
-                    } else if (oerderStatus == '1') { //已有其他业务员操作，状态变更为修改
+                    } else if (oerderStatus == '1') { //在操作过程中，已有其他业务员操作，状态变更为修改
                         wx.showModal({
                             title: '请注意',
                             content: '当前订单已经提交计划',
@@ -489,17 +504,16 @@ Page({
                 })
             })
         } else {
-            wx.showModal({
-                title: '请注意',
-                content: '提交车辆不能为0',
-                showCancel: false,
-                success(res) {
-
-                }
+            wx.showToast({
+                title: '请注意,提交车辆数不能为0',
+                icon: 'none',
+                duration: 2000
             })
         }
     },
+    //修改计划
     changeCar() {
+        //这里也全部继承web端代码，有优化空间啊
         let sendData = {
             delivery_order_id: "",
             add_capacities: [],
@@ -555,6 +569,7 @@ Page({
             this.upchange(sendData);
         }
     },
+    //判断数据是否有变化
     judgeIsDataChange() {
         return new Promise((resolve, reject) => {
             httpServer('searchOrderHasPower', {
@@ -578,8 +593,8 @@ Page({
                     } else {
                         for (let addIndex in this.data.alreadyList.add_capacities) {
                             if (nowData.add_capacities.indexOf(this.data.alreadyList.add_capacities[addIndex]) == -1) {
-                                reject(results)
                                 returnFlag = false;
+                                reject(results)
                                 break;
                             }
                         }
@@ -602,6 +617,7 @@ Page({
         })
 
     },
+    //判断订单状态是否发生变化
     judgeIsOrderStatus(callFunc) {
         httpServer('getPickOrderDetail', {
             id: this.data.id
@@ -617,36 +633,36 @@ Page({
             }
         });
     },
+    editCarPowerAjax(sendData) {
+        wx.showLoading({
+            title: '数据提交中...',
+            mask: true,
+        });
+        this.setData({
+            isSendAjax: true
+        })
+        httpServer("editCarPower", sendData).then((results) => {
+            wx.hideLoading();
+            this.setData({
+                isSendAjax: false
+            })
+            if (results.data.code == 0) {
+                wx.reLaunch({
+                    url: '/pages/orderList/orderList?currentChoosedBar=determine'
+                })
+            }
+        }).catch(() => {
+            wx.hideLoading();
+            this.setData({
+                isSendAjax: false
+            })
+        });
+    },
     upchange(sendData) {
         this.judgeIsDataChange().then((results) => {
-            let editCarPowerAjax = () => {
-                wx.showLoading({
-                    title: '数据提交中...',
-                    mask: true,
-                });
-                this.setData({
-                    isSendAjax: true
-                })
-                httpServer("editCarPower", sendData).then((results) => {
-                    wx.hideLoading();
-                    this.setData({
-                        isSendAjax: false
-                    })
-                    if (results.data.code == 0) {
-                        wx.reLaunch({
-                            url: '/pages/orderList/orderList?currentChoosedBar=determine'
-                        })
-                    }
-                }).catch(() => {
-                    wx.hideLoading();
-                    this.setData({
-                        isSendAjax: false
-                    })
-                });
-            }
             if (this.data.now_capacities.length > 0) {
                 if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
-                    editCarPowerAjax();
+                    this.editCarPowerAjax(sendData);
                 }
             } else {
                 wx.showModal({
@@ -656,7 +672,7 @@ Page({
                     cancelText: '取消',
                     success(res) {
                         if (res.confirm) {
-                            editCarPowerAjax();
+                            this.editCarPowerAjax(sendData);
                         }
                     }
                 })

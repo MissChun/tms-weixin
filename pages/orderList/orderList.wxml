@@ -44,14 +44,12 @@
 							</text>
 						</text>
 					</view>
-					<view  wx:if="{{item.status.key === 'appoint'}}" >
-						<button  data-id="{{item.id}}" data-operate="add" class="go-match-btn" bindtap="goArrangeCar">指派车辆</button>
-					</view>
-					<view  wx:if="{{item.status.key === 'confirmed'}}" >
-						<button  data-id="{{item.id}}" data-operate="edit" class="go-match-btn" bindtap="goArrangeCar">修改计划</button>
-					</view>
-					<view  wx:if="{{item.status.key === 'appoint'}}" >
-						<button  data-rowdata="{{item}}" data-operate="edit" class="go-match-btn" bindtap="upPlan">提交计划</button>
+					<view class="clearfix">
+						<button wx:if="{{item.status.key === 'appoint'}}"  data-id="{{item.id}}" data-operate="add" class="go-match-btn float-left" bindtap="goArrangeCar">指派车辆</button>
+				
+						<button wx:if="{{item.status.key === 'confirmed'}}"  data-id="{{item.id}}" data-operate="edit" class="go-fix-btn float-left" bindtap="goArrangeCar">修改计划</button>
+					
+						<button wx:if="{{item.status.key === 'appoint'}}"  data-rowdata="{{item}}" data-operate="edit" class="up-order-btn float-right" bindtap="upPlan">提交计划</button>
 					</view>
 				</view>
 			</view>

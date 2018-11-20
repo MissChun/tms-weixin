@@ -167,7 +167,8 @@ page {
 
 .go-match-btn {
     height: 70rpx;
-    margin-top: 36rpx;
+    width:280rpx;
+    margin-top: 30rpx;
 
     font-size: 32rpx;
     line-height: 70rpx;
@@ -178,6 +179,33 @@ page {
     background-color: #fff;
 }
 
+.go-fix-btn{
+    height: 70rpx;
+    width:100%;
+    margin-top: 30rpx;
+
+    font-size: 32rpx;
+    line-height: 70rpx;
+
+    color: #499bf8;
+    border: 1px solid #499bf8;
+    border-radius: 10rpx;
+    background-color: #fff;
+}
+
+.up-order-btn{
+    height: 70rpx;
+    width:280rpx;
+    margin-top: 30rpx;
+
+    font-size: 32rpx;
+    line-height: 70rpx;
+
+    color: #17BEBB;
+    border: 1px solid #17BEBB;
+    border-radius: 10rpx;
+    background-color: #fff;
+}
 .waybill-status {
     position: absolute;
     top: 28rpx;

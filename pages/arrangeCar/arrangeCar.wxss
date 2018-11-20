@@ -141,16 +141,17 @@ page {
 
 .status-display {
     position: absolute;
-    right: 0;
+    right: 40rpx;
+    bottom: 40rpx;
 
     font-size: 28rpx;
-
-    color: #67c23a;
+    line-height: 58rpx;
 }
 
 
-
 .waybill-item-content {
+    position: relative;
+
     padding: 30rpx 40rpx 40rpx 40rpx;
 
     font-size: 28rpx;
