@@ -179,7 +179,7 @@ Page({
                         if (resultsData.length) {
                             let orderListData = [...this.data.orderListData, ...resultsData];
                             orderListData.map(item => {
-                                item.plan_time = item.plan_time.substring(0, 9);
+                                item.plan_time = item.plan_time.substring(0, 10);
                             })
                             this.setData({
                                     orderListData: orderListData,

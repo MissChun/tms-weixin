@@ -1,11 +1,11 @@
 // pages/waybillList/waybillList.js
 
 /***这个页面主要有四大功能，代码基本继承web端代码
-****1、获取列表数据并排序getList，sortData
-****2、勾选或者取消勾选时各种状态判断 checkRows
-****3、提交数据addCar，changeCar
-****4、前端自己做搜索startSearch
-*/
+ ****1、获取列表数据并排序getList，sortData
+ ****2、勾选或者取消勾选时各种状态判断 checkRows
+ ****3、提交数据addCar，changeCar
+ ****4、前端自己做搜索startSearch
+ */
 import {
     httpServer
 } from '../../api/request.js'
@@ -101,6 +101,9 @@ Page({
             title: '数据加载中',
             mask: true,
         });
+        this.setData({
+            isGettingList: true,
+        })
         Promise.all([q1, q2, q3, q4]).then(res => {
             if (res[0].data.code === 0) {
                 this.setData({
@@ -137,20 +140,30 @@ Page({
                     })
                 }
             }
+
             wx.hideLoading();
+            setTimeout(() => {
+                this.setData({
+                    isGettingList: false,
+                })
+            }, 500)
+
             this.sortData();
         }).catch(error => {
             wx.hideLoading();
+            this.setData({
+                isGettingList: false,
+            })
         })
     },
     //获取列表数据后对列表数据进行排序，后端没有办法排序，因此全部放在前端，并且后端没有做分页，这里是把所有列表数据一次行拿回来排序并渲染
-    sortData() {//这里的排序方法我继承web端的代码，没有做修改，只做了代码小程序化,这里代码太乱了，需要优化
+    sortData() { //这里的排序方法我继承web端的代码，没有做修改，只做了代码小程序化,这里代码太乱了，需要优化
         let operationArr = [...this.data.tractor_semitrailers_List];
         let newArr = [];
         let fifterArr = [];
 
         for (let i = 0; i < operationArr.length; i++) { //循环所有运力列表
-            
+
             let addflag = false;
             for (let j = 0; j < this.data.delivery_list.trips.length; j++) { //筛选当前订单的列表
                 //筛选
@@ -164,7 +177,11 @@ Page({
                         this.data.now_capacities.push(operationArr[i]);
                         this.setData({
                                 now_capacities: this.data.now_capacities,
-                                start_capacities: this.data.now_capacities
+                            })
+                            //这里蛋疼
+                        this.data.start_capacities.push(operationArr[i].waybill.capacity ? operationArr[i].waybill : operationArr[i]);
+                        this.setData({
+                                start_capacities: this.data.start_capacities
                             })
                             //如果是取消中    
                     } else if (this.data.delivery_list.trips[j].waybill_change_status == "canceled") {
@@ -202,12 +219,15 @@ Page({
             }
             if (addAlreaListflag) {
                 fifterArr[findex1].bindCheckBox = true;
-                console.log('fifterArr[findex1]', fifterArr[findex1], findex1, fifterArr[findex1].bindCheckBox)
                 newArr.push(fifterArr[findex1]);
                 this.data.now_capacities.push(fifterArr[findex1]);
                 this.setData({
-                    now_capacities: this.data.now_capacities,
-                    start_capacities: this.data.now_capacities
+                        now_capacities: this.data.now_capacities,
+                    })
+                    //这里蛋疼
+                this.data.start_capacities.push(fifterArr[findex1].waybill.capacity ? fifterArr[findex1].waybill : fifterArr[findex1]);
+                this.setData({
+                    start_capacities: this.data.start_capacities
                 })
             } else {
                 fifterArr4.push(fifterArr[findex1]);
@@ -237,23 +257,22 @@ Page({
         }
 
 
-        newArr.map(item =>{
-            if(item.waybill && this.data.allStatus.indexOf(item.waybill.status)>-1){
+        newArr.map(item => {
+            if (item.waybill && this.data.allStatus.indexOf(item.waybill.status) > -1) {
                 item.isConfirmed = true;
             }
-            if(item.waybill && this.data.noCanceled.indexOf(item.waybill.status)>-1){
+            if (item.waybill && this.data.noCanceled.indexOf(item.waybill.status) > -1) {
                 item.isNotCancel = true;
             }
         })
 
-        
+
         this.setData({
             trueAll_list: newArr,
             renderAll_list: newArr
 
         })
 
-        console.log('renderAll_list', this.data.renderAll_list);
     },
     //取消勾选或者勾选
     checkRows: function(e) {
@@ -310,6 +329,7 @@ Page({
     //判断车辆是否在别的订单的回调
     searchNoUseCallback(currentIndex, results) {
         let currentItem = this.data.renderAll_list[currentIndex];
+        let _this = this;
         if (results.data && results.data.code == 0) {
             let resultsData = results.data.data;
             if (resultsData.interrupt_waybill_number.length > 0) {
@@ -325,12 +345,8 @@ Page({
                 })
             } else if (resultsData.trips_driver_unconfirm_list.length == 0 && resultsData.delivery_list.length) {
                 //这个车已经存在订单，可以继续添加，这里需提示用户是否继续
-                let orderListText = "";
-                resultsData.forEach((item) => {
-                    orderListText += item + ",";
-                });
-
-                let noticeStr = '车号 ' + row.tractor.plate_number + ' 已存在于订单' + orderListText + '是否继续添加进入订单';
+                let orderListText = resultsData.delivery_list.join(',');
+                let noticeStr = '车号 ' + currentItem.tractor.plate_number + ' 已存在于订单' + orderListText + '是否继续添加进入订单';
 
                 wx.showModal({
                     title: '提示',
@@ -339,7 +355,7 @@ Page({
                     cancelText: '返回',
                     success(res) {
                         if (res.confirm) {
-                            this.confirmChoose(currentIndex);
+                            _this.confirmChoose(currentIndex);
                         }
                     }
                 })
@@ -355,14 +371,14 @@ Page({
                     cancelText: '返回',
                     success(res) {
                         if (res.confirm) {
-                            this.confirmChoose(currentIndex);
+                            _this.confirmChoose(currentIndex);
 
                         }
                     }
                 })
             } else if (resultsData.trips_driver_unconfirm_list.length == 0 && resultsData.delivery_list.length == 0 && results.data.data.interrupt_waybill_number.length == 0) {
                 //正常派单
-                this.confirmChoose(currentIndex);
+                _this.confirmChoose(currentIndex);
             }
         }
     },
@@ -420,7 +436,7 @@ Page({
     //添加车辆
     addCar() {
         if (this.data.now_capacities.length > 0) {
-
+            let _this = this;
             this.judgeIsDataChange().then(() => {
                 this.judgeIsOrderStatus((oerderStatus) => {
                     if (oerderStatus == '0') { //可正常添加
@@ -463,7 +479,7 @@ Page({
                             success(res) {
                                 if (res.confirm) {
                                     wx.reLaunch({
-                                        url: '/pages/arrangeCar/arrangeCar?id=' + this.data.id + '&operationStatus=edit'
+                                        url: '/pages/arrangeCar/arrangeCar?id=' + _this.data.id + '&operationStatus=edit'
                                     })
                                 } else if (res.cancel) {
                                     wx.reLaunch({
@@ -489,7 +505,6 @@ Page({
                     }
                 });
             }).catch((err) => {
-                console.log('err', err)
                 wx.showModal({
                     title: '请注意',
                     content: '订单数据已更新，请重新操作',
@@ -497,7 +512,7 @@ Page({
                     success(res) {
                         if (res.confirm) {
                             wx.reLaunch({
-                                url: '/pages/arrangeCar/arrangeCar?id=' + this.data.id + '&operationStatus=' + this.data.operationStatus
+                                url: '/pages/arrangeCar/arrangeCar?id=' + _this.data.id + '&operationStatus=' + _this.data.operationStatus
                             })
                         }
                     }
@@ -534,6 +549,7 @@ Page({
             }
         });
         this.data.start_capacities.forEach(item => {
+
             let cancleFalg = true;
             this.data.now_capacities.forEach(nowItem => {
                 if (item.capacity == nowItem.id) {
@@ -565,7 +581,6 @@ Page({
                 duration: 2000
             })
         } else {
-            console.log('sendData', sendData);
             this.upchange(sendData);
         }
     },
@@ -611,7 +626,6 @@ Page({
                     }
                 }
             }).catch((err) => {
-                console.log('err', err)
                 reject(err)
             });
         })
@@ -659,6 +673,8 @@ Page({
         });
     },
     upchange(sendData) {
+
+        let _this = this;
         this.judgeIsDataChange().then((results) => {
             if (this.data.now_capacities.length > 0) {
                 if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
@@ -672,7 +688,7 @@ Page({
                     cancelText: '取消',
                     success(res) {
                         if (res.confirm) {
-                            this.editCarPowerAjax(sendData);
+                            _this.editCarPowerAjax(sendData);
                         }
                     }
                 })
@@ -685,7 +701,7 @@ Page({
                 success(res) {
                     if (res.confirm) {
                         wx.reLaunch({
-                            url: '/pages/arrangeCar/arrangeCar?id=' + this.data.id + '&operationStatus=' + this.data.operationStatus
+                            url: '/pages/arrangeCar/arrangeCar?id=' + _this.data.id + '&operationStatus=' + _this.data.operationStatus
                         })
                     }
                 }

@@ -37,6 +37,10 @@
 			</view>
 		</view>
 	</view>
+	<view wx:if="{{!renderAll_list.length && !isGettingList }}" class="null-view">
+		<view><image src="/images/null_data.png"></image></view>
+		<text>暂无数据哦~</text>
+	</view>
 	<view class="buttom-confirm">
 		<button wx:if="{{operationStatus === 'add'}}"  bindtap="addCar" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="confirm-match-btn">添加车辆</button>
 		<button wx:if="{{operationStatus !== 'add'}}"  bindtap="changeCar" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="confirm-match-btn">提交修改</button>
