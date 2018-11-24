@@ -9,12 +9,13 @@ import api from './api';
 
 /* 配置访问url */
 
-let isProduction = true;
+let isProduction = false;
 
 let domainUrl = isProduction ? 'https://api.91lng.com/wechat' : 'http://39.104.71.159:6602';
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
+    console.log('error',error);
     let errorMsg = '';
     if (error && error.statusCode) {
         switch (error.statusCode) {

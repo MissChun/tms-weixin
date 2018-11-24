@@ -31,3 +31,38 @@ form {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.clearfix::before,
+.clearfix::after {
+    display: block;
+    visibility: hidden;
+    height: 0;
+    clear: both;
+
+    line-height: 0;
+
+    content: "";
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+
+.primary-color{
+    color:#659AD7;
+}
+
+.warning-color{
+    color:#F68281;
+}
+
+.danger-color{
+    color:#999999;
+}
+
+.success-color{
+    color:#17BEBB;
+}
+
+

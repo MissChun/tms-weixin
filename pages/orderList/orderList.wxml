@@ -1,0 +1,64 @@
+<!--pages/waybillList/waybillList.wxml-->
+<view class="waybill-container">
+	<view class="top-bar-view">
+		<view class="search-view">
+			<view class="search-box">
+				<view class="traggle-pick">
+					<picker mode="selector" bindchange="chooseField" range-key="value" value="{{choosedFieldIndex}}" range="{{fieldList}}">
+					    <view class="filed-picker">{{fieldList[choosedFieldIndex].value}}</view>
+					</picker>
+					<view class="traggle-down"><image src="/images/traggle_down.png" /></view>
+				</view>
+				<view class="search-input-view">
+					<input confirm-type="search" class="public-input" type="text" name="searchWord" placeholder="请输入" bindinput="searchInputChange" bindconfirm="startSearch"/>
+				</view>
+			</view>
+		</view>
+		<view class="top-bar">
+			<view class="float-left top-bar-item" wx:for="{{topBarList}}" wx:key="param">
+				<text data-param="{{item.param}}" catchtap="chooseBar" class="{{item.isChoosed ? 'choosed-bar' : ''}}">{{item.label}}</text>
+			</view>
+		</view>
+	</view>
+	<view class="waybill-list" wx:if="{{orderListData.length}}">
+		<block >
+			<view class="waybill-item" wx:for="{{orderListData}}" wx:key="id">
+				<view class="waybill-item-title">
+					<text class="float-left">订单号：{{item.order_number}}</text>
+					<text class="float-right">{{item.status && item.status.verbose || '无'}}</text>
+				</view>
+				<view class="waybill-item-content">
+					<view>
+						<text>液厂：{{item.fluid_name}}</text>
+					</view>
+					<view>
+						<text>计划时间：{{item.plan_time}}</text>
+					</view>
+					<view>
+						<text>需求车数：{{item.sure_car_number}}/{{item.require_car_number}}</text>
+					</view>
+					<view>
+						<text>卸货信息：<text wx:for="{{item.pre_business_order_list}}" wx:for-item="Uitem" wx:for-index="Uindex" wx:key="Uindex">
+								<text wx:if="{{item.pre_business_order_list && item.pre_business_order_list.length>1 && Uindex < (item.pre_business_order_list.length-1)}}">{{Uitem.station}}/</text>
+								<text wx:else>{{Uitem.station}}</text>
+							</text>
+						</text>
+					</view>
+					<view class="clearfix">
+						<button wx:if="{{item.status.key === 'appoint'}}"  data-id="{{item.id}}" data-operate="add" class="go-match-btn float-left" bindtap="goArrangeCar">指派车辆</button>
+				
+						<button wx:if="{{item.status.key === 'confirmed'}}"  data-id="{{item.id}}" data-operate="edit" class="go-fix-btn float-left" bindtap="goArrangeCar">修改计划</button>
+					
+						<button wx:if="{{item.status.key === 'appoint'}}"  data-rowdata="{{item}}" data-operate="edit" class="up-order-btn float-right" bindtap="upPlan">提交计划</button>
+					</view>
+				</view>
+			</view>
+		</block>
+
+	</view>
+	<view class="gray-tip" wx:if="{{total !== '' && currentPage == totalPage && !isGettingList}}">无更多数据哦~</view>
+	<view wx:if="{{!orderListData.length && !isGettingList }}" class="null-view">
+		<view><image src="/images/null_data.png"></image></view>
+		<text>暂无数据哦~</text>
+	</view>
+</view>

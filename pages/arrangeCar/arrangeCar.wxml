@@ -1,0 +1,49 @@
+<view class="match-waybill-container">
+	<view class="top-bar-view">
+		<view class="search-view">
+			<view class="search-box">
+				<view class="traggle-pick">
+					<picker mode="selector" bindchange="chooseField" range-key="value" value="{{choosedFieldIndex}}" range="{{fieldList}}">
+					    <view class="filed-picker">{{fieldList[choosedFieldIndex].value}}</view>
+					</picker>
+					<view class="traggle-down"><image src="/images/traggle_down.png" /></view>
+				</view>
+				<view class="search-input-view">
+					<input confirm-type="search" class="public-input" type="text" name="searchWord" placeholder="请输入" bindinput="searchInputChange" bindconfirm="startSearch"/>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="waybill-list">
+		<view class="waybill-item" wx:for="{{renderAll_list}}" wx:key="id">
+			<view class="waybill-item-title">
+				<view class="waybill-item-title-content over-ellipsis">
+					<text class="station-name ">{{item.tractor.plate_number}}</text>
+					<text class="no-choose" wx-if="{{!item.bindCheckBox && !item.isDisable}}" data-index="{{index}}" bindtap="checkRows"></text>
+					<icon class="choose-icon" type="success" color="#499BF8" size="23" wx-if="{{item.bindCheckBox && !item.isDisable}}" data-index="{{index}}" bindtap="checkRows"></icon>
+				</view>
+			</view>
+			<view class="waybill-item-content">
+				<text>主驾：{{item.master_driver.name}}-{{item.master_driver.mobile_phone}}</text>
+				<text>副驾：{{item.vice_driver.name}}-{{item.vice_driver.mobile_phone}}</text>
+				<text>押运：{{item.escort_staff.name}}-{{item.escort_staff.mobile_phone}}</text>
+				<text>挂车号：{{item.semitrailer.plate_number}}</text>
+				<text>
+					<text class="status-display success-color" wx:if="{{item.isConfirmed}}">已审核</text>
+					<text class="status-display warning-color" wx:elif="{{item.waybill.status==='canceled'}}">已取消过</text>
+					<text class="status-display danger-color" wx:elif="{{item.isNotCancel}}">不可取消</text>
+					<text class="status-display primary-color" wx:else>未选择过</text>
+				</text>
+			</view>
+		</view>
+	</view>
+	<view wx:if="{{!renderAll_list.length && !isGettingList }}" class="null-view">
+		<view><image src="/images/null_data.png"></image></view>
+		<text>暂无数据哦~</text>
+	</view>
+	<view class="buttom-confirm">
+		<button wx:if="{{operationStatus === 'add'}}"  bindtap="addCar" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="confirm-match-btn">添加车辆</button>
+		<button wx:if="{{operationStatus !== 'add'}}"  bindtap="changeCar" loading="{{isSendAjax}}" disabled="{{isSendAjax}}" class="confirm-match-btn">提交修改</button>
+	</view>
+</view>
+
