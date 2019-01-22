@@ -1,7 +1,7 @@
 import {
     httpServer
-} from '../../api/request.js'
-
+} from '../../api/request.js';
+import gio from '../../utils/gio-minp';
 Page({
     onShareAppMessage() {
         return {
@@ -76,6 +76,7 @@ Page({
             })
             if (res.data && res.data.code === 0) {
                 const token = res.data.content.data.ticket;
+                gio('setUserId', res.data.content.data.user_id); 
                 wx.setStorage({
                     key: "token",
                     data: token,
